@@ -1,0 +1,1130 @@
+diff --git a/src/cli/index.ts b/src/cli/index.ts
+index 0a2020b..e1d31b0 100644
+--- a/src/cli/index.ts
++++ b/src/cli/index.ts
+@@ -10,11 +10,11 @@ import { run } from './run';
+
+ function header(): void {
+   console.log('\n');
+-  p.intro(`${c.green(`@antfu/eslint-config `)}${c.dim(`v${pkgJson.version}`)}`);
++  p.intro(`${c.green(`@finografic/eslint-config `)}${c.dim(`v${pkgJson.version}`)}`);
+ }
+
+ const instance = yargs(hideBin(process.argv))
+-  .scriptName('@antfu/eslint-config')
++  .scriptName('@finografic/eslint-config')
+   .usage('')
+   .command(
+     '*',
+@@ -57,5 +57,5 @@ const instance = yargs(hideBin(process.argv))
+   .version('version', pkgJson.version)
+   .alias('v', 'version');
+
+-// eslint-disable-next-line ts/no-unused-expressions
++// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+ instance.help().argv;
+diff --git a/src/cli/run.ts b/src/cli/run.ts
+index 9756e17..72e9d07 100644
+--- a/src/cli/run.ts
++++ b/src/cli/run.ts
+@@ -1,9 +1,5 @@
+ /* eslint-disable perfectionist/sort-objects */
+-import type {
+-  ExtraLibrariesOption,
+-  FrameworkOption,
+-  PromptResult,
+-} from './types';
++import type { ExtraLibrariesOption, FrameworkOption, PromptResult } from './types';
+
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -35,29 +31,21 @@ export interface CliRunOptions {
+
+ export async function run(options: CliRunOptions = {}): Promise<void> {
+   const argSkipPrompt = !!process.env.SKIP_PROMPT || options.yes;
+-  const argTemplate = <FrameworkOption[]>(
+-    options.frameworks?.map(m => m.trim())
+-  );
++  const argTemplate = <FrameworkOption[]>options.frameworks?.map(m => m.trim());
+   const argExtra = <ExtraLibrariesOption[]>options.extra?.map(m => m.trim());
+
+   if (fs.existsSync(path.join(process.cwd(), 'eslint.config.js'))) {
+-    p.log.warn(
+-      c.yellow(`eslint.config.js already exists, migration wizard exited.`),
+-    );
++    p.log.warn(c.yellow(`eslint.config.js already exists, migration wizard exited.`));
+     return process.exit(1);
+   }
+
+   if (fs.existsSync(path.join(process.cwd(), 'eslint.config.cjs'))) {
+-    p.log.warn(
+-      c.yellow(`eslint.config.cjs already exists, migration wizard exited.`),
+-    );
++    p.log.warn(c.yellow(`eslint.config.cjs already exists, migration wizard exited.`));
+     return process.exit(1);
+   }
+
+   if (fs.existsSync(path.join(process.cwd(), 'eslint.config.mjs'))) {
+-    p.log.warn(
+-      c.yellow(`eslint.config.mjs already exists, migration wizard exited.`),
+-    );
++    p.log.warn(c.yellow(`eslint.config.mjs already exists, migration wizard exited.`));
+     return process.exit(1);
+   }
+
+@@ -78,14 +66,12 @@ export async function run(options: CliRunOptions = {}): Promise<void> {
+
+           return p.confirm({
+             initialValue: false,
+-            message:
+-              'There are uncommitted changes in the current repository, are you sure to continue?',
++            message: 'There are uncommitted changes in the current repository, are you sure to continue?',
+           });
+         },
+         frameworks: ({ results }) => {
+           const isArgTemplateValid
+-            = typeof argTemplate === 'string'
+-              && !!frameworks.includes(<FrameworkOption>argTemplate);
++            = typeof argTemplate === 'string' && !!frameworks.includes(<FrameworkOption>argTemplate);
+
+           if (!results.uncommittedConfirmed || isArgTemplateValid)
+             return;
+@@ -104,9 +90,7 @@ export async function run(options: CliRunOptions = {}): Promise<void> {
+         extra: ({ results }) => {
+           const isArgExtraValid
+             = argExtra?.length
+-              && !argExtra.filter(
+-                element => !extra.includes(<ExtraLibrariesOption>element),
+-              ).length;
++              && !argExtra.filter(element => !extra.includes(<ExtraLibrariesOption>element)).length;
+
+           if (!results.uncommittedConfirmed || isArgExtraValid)
+             return;
+@@ -129,8 +113,7 @@ export async function run(options: CliRunOptions = {}): Promise<void> {
+
+           return p.confirm({
+             initialValue: true,
+-            message:
+-              'Update .vscode/settings.json for better VS Code experience?',
++            message: 'Update .vscode/settings.json for better VS Code experience?',
+           });
+         },
+       },
+diff --git a/src/cli/stages/update-eslint-files.ts b/src/cli/stages/update-eslint-files.ts
+index 83044e3..7a199dd 100644
+--- a/src/cli/stages/update-eslint-files.ts
++++ b/src/cli/stages/update-eslint-files.ts
+@@ -48,8 +48,7 @@ export async function updateEslintFiles(result: PromptResult): Promise<void> {
+   if (result.extra.includes('unocss'))
+     configLines.push(`unocss: true,`);
+
+-  for (const framework of result.frameworks)
+-    configLines.push(`${framework}: true,`);
++  for (const framework of result.frameworks) configLines.push(`${framework}: true,`);
+
+   const mainConfig = configLines.map(i => `  ${i}`).join('\n');
+   const additionalConfig: string[] = [];
+diff --git a/src/cli/stages/update-package-json.ts b/src/cli/stages/update-package-json.ts
+index 6d09568..4f2b967 100644
+--- a/src/cli/stages/update-package-json.ts
++++ b/src/cli/stages/update-package-json.ts
+@@ -1,10 +1,8 @@
+ import type { ExtraLibrariesOption, PromptResult } from '../types';
+ import fsp from 'node:fs/promises';
+ import path from 'node:path';
+-
+ import process from 'node:process';
+ import * as p from '@clack/prompts';
+-
+ import c from 'picocolors';
+
+ import { dependenciesMap, pkgJson } from '../constants';
+@@ -14,13 +12,13 @@ export async function updatePackageJson(result: PromptResult): Promise<void> {
+
+   const pathPackageJSON = path.join(cwd, 'package.json');
+
+-  p.log.step(c.cyan(`Bumping @antfu/eslint-config to v${pkgJson.version}`));
++  p.log.step(c.cyan(`Bumping @fingorafic/eslint-config to v${pkgJson.version}`));
+
+   const pkgContent = await fsp.readFile(pathPackageJSON, 'utf-8');
+   const pkg: Record<string, any> = JSON.parse(pkgContent);
+
+   pkg.devDependencies ??= {};
+-  pkg.devDependencies['@antfu/eslint-config'] = `^${pkgJson.version}`;
++  pkg.devDependencies['@finografic/eslint-config'] = `^${pkgJson.version}`;
+   pkg.devDependencies.eslint ??= pkgJson
+     .devDependencies
+     .eslint
+@@ -32,17 +30,6 @@ export async function updatePackageJson(result: PromptResult): Promise<void> {
+   if (result.extra.length) {
+     result.extra.forEach((item: ExtraLibrariesOption) => {
+       switch (item) {
+-        case 'formatter':
+-          (<const>[
+-            'eslint-plugin-format',
+-            result.frameworks.includes('astro') ? 'prettier-plugin-astro' : null,
+-          ]).forEach((f) => {
+-            if (!f)
+-              return;
+-            pkg.devDependencies[f] = pkgJson.devDependencies[f];
+-            addedPackages.push(f);
+-          });
+-          break;
+         case 'unocss':
+           (<const>[
+             '@unocss/eslint-plugin',
+diff --git a/src/cli/utils.ts b/src/cli/utils.ts
+index b329366..b0b20af 100644
+--- a/src/cli/utils.ts
++++ b/src/cli/utils.ts
+@@ -15,9 +15,9 @@ export function getEslintConfigContent(
+   additionalConfigs?: string[],
+ ): string {
+   return `
+-import antfu from '@antfu/eslint-config'
++import fino from '@finografic/eslint-config'
+
+-export default antfu({
++export default fino({
+ ${mainConfig}
+ }${additionalConfigs?.map(config => `,{\n${config}\n}`)})
+ `.trimStart();
+diff --git a/src/configs/command.ts b/src/configs/command.ts
+index 8e1311d..4bfad13 100644
+--- a/src/configs/command.ts
++++ b/src/configs/command.ts
+@@ -1,5 +1,4 @@
+ import type { TypedFlatConfigItem } from '../types';
+-
+ import createCommand from 'eslint-plugin-command/config';
+
+ export async function command(): Promise<TypedFlatConfigItem[]> {
+diff --git a/src/configs/comments.ts b/src/configs/comments.ts
+index c0ca3c6..8c56805 100644
+--- a/src/configs/comments.ts
++++ b/src/configs/comments.ts
+@@ -1,7 +1,6 @@
+ import type { TypedFlatConfigItem } from '../types';
+-
++import { ERROR } from '../constants';
+ import { pluginComments } from '../plugins';
+-import { ERROR } from '../rule-settings';
+
+ export async function comments(): Promise<TypedFlatConfigItem[]> {
+   return [
+diff --git a/src/configs/development.ts b/src/configs/development.ts
+new file mode 100644
+index 0000000..921fe3c
+--- /dev/null
++++ b/src/configs/development.ts
+@@ -0,0 +1,23 @@
++import type { ESLintConfig } from '../eslint.types';
++import { OFF } from '../constants';
++
++export const development = {
++  rules: {
++    // TypeScript
++    '@typescript-eslint/ban-ts-comment': OFF,
++    '@typescript-eslint/no-explicit-any': OFF,
++    '@typescript-eslint/no-unused-vars': OFF,
++
++    // General
++    'no-console': OFF,
++    'no-debugger': OFF,
++    'no-unused-vars': OFF,
++
++    // Other
++    'perfectionist/sort-imports': OFF,
++    'unused-imports/no-unused-imports': OFF,
++
++    // Import/Export
++    'unused-imports/no-unused-vars': OFF,
++  },
++} satisfies Pick<ESLintConfig, 'rules'>;
+diff --git a/src/configs/disables.ts b/src/configs/disables.ts
+index 05d5db8..0116c58 100644
+--- a/src/configs/disables.ts
++++ b/src/configs/disables.ts
+@@ -1,6 +1,6 @@
+ import type { TypedFlatConfigItem } from '../types';
++import { OFF } from '../constants';
+ import { GLOB_SRC, GLOB_SRC_EXT } from '../globs';
+-import { OFF } from '../rule-settings';
+
+ export async function disables(): Promise<TypedFlatConfigItem[]> {
+   return [
+@@ -8,9 +8,9 @@ export async function disables(): Promise<TypedFlatConfigItem[]> {
+       files: [`**/scripts/${GLOB_SRC}`],
+       name: 'fino/disables/scripts',
+       rules: {
++        '@typescript-eslint/explicit-function-return-type': OFF,
+         'fino/no-top-level-await': OFF,
+         'no-console': OFF,
+-        'ts/explicit-function-return-type': OFF,
+       },
+     },
+     {
+@@ -43,16 +43,16 @@ export async function disables(): Promise<TypedFlatConfigItem[]> {
+       files: ['**/*.js', '**/*.cjs'],
+       name: 'fino/disables/cjs',
+       rules: {
+-        'ts/no-require-imports': OFF,
++        '@typescript-eslint/no-require-imports': OFF,
+       },
+     },
+     {
+       files: [`**/*.config.${GLOB_SRC_EXT}`, `**/*.config.*.${GLOB_SRC_EXT}`],
+       name: 'fino/disables/config-files',
+       rules: {
++        '@typescript-eslint/explicit-function-return-type': OFF,
+         'fino/no-top-level-await': OFF,
+         'no-console': OFF,
+-        'ts/explicit-function-return-type': OFF,
+       },
+     },
+   ];
+diff --git a/src/configs/formatters.ts b/src/configs/formatters.ts
+index 7560bb1..394870f 100644
+--- a/src/configs/formatters.ts
++++ b/src/configs/formatters.ts
+@@ -7,8 +7,8 @@ import type {
+   VendoredPrettierOptions,
+   VendoredPrettierRuleOptions,
+ } from '../vender/prettier-types';
+-
+ import { isPackageExists } from 'local-pkg';
++import { ERROR, OFF } from '../constants';
+ import {
+   GLOB_CSS,
+   GLOB_GRAPHQL,
+@@ -20,8 +20,6 @@ import {
+   GLOB_SVG,
+   GLOB_XML,
+ } from '../globs';
+-
+-import { ERROR, OFF } from '../rule-settings';
+ import {
+   ensurePackages,
+   interopDefault,
+diff --git a/src/configs/ignores.ts b/src/configs/ignores.ts
+index 7e1b49d..32031b0 100644
+--- a/src/configs/ignores.ts
++++ b/src/configs/ignores.ts
+@@ -1,5 +1,4 @@
+ import type { TypedFlatConfigItem } from '../types';
+-
+ import { GLOB_EXCLUDE } from '../globs';
+
+ export async function ignores(userIgnores: string[] = []): Promise<TypedFlatConfigItem[]> {
+diff --git a/src/configs/imports.ts b/src/configs/imports.ts
+index f339b4a..4954577 100644
+--- a/src/configs/imports.ts
++++ b/src/configs/imports.ts
+@@ -1,6 +1,6 @@
+ import type { OptionsStylistic, TypedFlatConfigItem } from '../types';
++import { ERROR } from '../constants';
+ import { pluginFino, pluginImport } from '../plugins';
+-import { ERROR } from '../rule-settings';
+
+ export async function imports(options: OptionsStylistic = {}): Promise<TypedFlatConfigItem[]> {
+   const {
+diff --git a/src/configs/index.ts b/src/configs/index.ts
+index 9541034..76d1004 100644
+--- a/src/configs/index.ts
++++ b/src/configs/index.ts
+@@ -1,5 +1,6 @@
+ export * from './command';
+ export * from './comments';
++export * from './development';
+ export * from './disables';
+ export * from './formatters';
+ export * from './ignores';
+@@ -8,9 +9,11 @@ export * from './javascript';
+ export * from './jsdoc';
+ export * from './jsonc';
+ export * from './jsx';
++// export * from './lodash';
+ export * from './markdown';
+ export * from './node';
+ export * from './perfectionist';
++// export * from './prettier';
+ export * from './react';
+ export * from './regexp';
+ export * from './sort';
+diff --git a/src/configs/javascript.ts b/src/configs/javascript.ts
+index 716cc89..afdde7a 100644
+--- a/src/configs/javascript.ts
++++ b/src/configs/javascript.ts
+@@ -1,7 +1,7 @@
+ import type { OptionsIsInEditor, OptionsOverrides, TypedFlatConfigItem } from '../types';
+ import globals from 'globals';
++import { ERROR, WARN } from '../constants';
+ import { pluginFino, pluginUnusedImports } from '../plugins';
+-import { ERROR, WARN } from '../rule-settings';
+
+ export async function javascript(
+   options: OptionsIsInEditor & OptionsOverrides = {},
+diff --git a/src/configs/jsdoc.ts b/src/configs/jsdoc.ts
+index 8d7e664..d56c6b8 100644
+--- a/src/configs/jsdoc.ts
++++ b/src/configs/jsdoc.ts
+@@ -1,5 +1,5 @@
+ import type { OptionsStylistic, TypedFlatConfigItem } from '../types';
+-import { WARN } from '../rule-settings';
++import { WARN } from '../constants';
+ import { interopDefault } from '../utils';
+
+ export async function jsdoc(options: OptionsStylistic = {}): Promise<TypedFlatConfigItem[]> {
+diff --git a/src/configs/jsonc.ts b/src/configs/jsonc.ts
+index 305d0a4..d721b14 100644
+--- a/src/configs/jsonc.ts
++++ b/src/configs/jsonc.ts
+@@ -4,9 +4,8 @@ import type {
+   OptionsStylistic,
+   TypedFlatConfigItem,
+ } from '../types';
+-
++import { ERROR } from '../constants';
+ import { GLOB_JSON, GLOB_JSON5, GLOB_JSONC } from '../globs';
+-import { ERROR } from '../rule-settings';
+ import { interopDefault } from '../utils';
+
+ export async function jsonc(
+diff --git a/src/configs/lodash.ts b/src/configs/lodash.ts
+new file mode 100644
+index 0000000..cabf002
+--- /dev/null
++++ b/src/configs/lodash.ts
+@@ -0,0 +1,19 @@
++import type { TypedFlatConfigItem } from '../types';
++import { ERROR, OFF } from '../constants';
++import { pluginLodash } from '../plugins';
++
++export async function lodash(): Promise<TypedFlatConfigItem[]> {
++  return [
++    {
++      name: 'fino/lodash/rules',
++      plugins: {
++        lodash: pluginLodash,
++      },
++      rules: {
++        'lodash/import-scope': [ERROR, 'method'],
++        'lodash/prefer-lodash-method': OFF,
++        'lodash/prefer-lodash-typecheck': OFF,
++      },
++    },
++  ];
++}
+diff --git a/src/configs/markdown.ts b/src/configs/markdown.ts
+index d490cb2..7892902 100644
+--- a/src/configs/markdown.ts
++++ b/src/configs/markdown.ts
+@@ -1,7 +1,7 @@
+ import type { OptionsComponentExts, OptionsFiles, OptionsOverrides, TypedFlatConfigItem } from '../types';
+ import { mergeProcessors, processorPassThrough } from 'eslint-merge-processors';
++import { OFF } from '../constants';
+ import { GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN } from '../globs';
+-import { OFF } from '../rule-settings';
+ import { interopDefault, parserPlain } from '../utils';
+
+ export async function markdown(
+@@ -55,32 +55,32 @@ export async function markdown(
+       },
+       name: 'fino/markdown/disables',
+       rules: {
+-        'fino/no-top-level-await': OFF,
++        '@typescript-eslint/consistent-type-imports': OFF,
++
++        '@typescript-eslint/explicit-function-return-type': OFF,
+
++        '@typescript-eslint/no-namespace': OFF,
++        '@typescript-eslint/no-redeclare': OFF,
++        '@typescript-eslint/no-require-imports': OFF,
++        '@typescript-eslint/no-unused-expressions': OFF,
++        '@typescript-eslint/no-unused-vars': OFF,
++        '@typescript-eslint/no-use-before-define': OFF,
++        'fino/no-top-level-await': OFF,
+         'import/newline-after-import': OFF,
+
+         'no-alert': OFF,
+         'no-console': OFF,
+         'no-labels': OFF,
++
+         'no-lone-blocks': OFF,
+         'no-restricted-syntax': OFF,
+         'no-undef': OFF,
+         'no-unused-expressions': OFF,
+         'no-unused-labels': OFF,
+-
+         'no-unused-vars': OFF,
+         'node/prefer-global/process': OFF,
+         'style/comma-dangle': OFF,
+-
+         'style/eol-last': OFF,
+-        'ts/consistent-type-imports': OFF,
+-        'ts/explicit-function-return-type': OFF,
+-        'ts/no-namespace': OFF,
+-        'ts/no-redeclare': OFF,
+-        'ts/no-require-imports': OFF,
+-        'ts/no-unused-expressions': OFF,
+-        'ts/no-unused-vars': OFF,
+-        'ts/no-use-before-define': OFF,
+
+         'unicode-bom': OFF,
+         'unused-imports/no-unused-imports': OFF,
+diff --git a/src/configs/node.ts b/src/configs/node.ts
+index 189f4da..ddba601 100644
+--- a/src/configs/node.ts
++++ b/src/configs/node.ts
+@@ -1,6 +1,6 @@
+ import type { TypedFlatConfigItem } from '../types';
++import { ERROR } from '../constants';
+ import { pluginNode } from '../plugins';
+-import { ERROR } from '../rule-settings';
+
+ export async function node(): Promise<TypedFlatConfigItem[]> {
+   return [
+diff --git a/src/configs/perfectionist.ts b/src/configs/perfectionist.ts
+index a1a8c3d..1f7446c 100644
+--- a/src/configs/perfectionist.ts
++++ b/src/configs/perfectionist.ts
+@@ -1,6 +1,6 @@
+ import type { TypedFlatConfigItem } from '../types';
++import { ERROR } from '../constants';
+ import { pluginPerfectionist } from '../plugins';
+-import { ERROR } from '../rule-settings';
+
+ /**
+  * Perfectionist plugin for props and items sorting.
+diff --git a/src/configs/react.ts b/src/configs/react.ts
+index 0a709c7..f70b8f0 100644
+--- a/src/configs/react.ts
++++ b/src/configs/react.ts
+@@ -5,11 +5,9 @@ import type {
+   OptionsTypeScriptWithTypes,
+   TypedFlatConfigItem,
+ } from '../types';
+-
+ import { isPackageExists } from 'local-pkg';
++import { ERROR, WARN } from '../constants';
+ import { GLOB_MARKDOWN, GLOB_SRC, GLOB_TS, GLOB_TSX } from '../globs';
+-
+-import { ERROR, WARN } from '../rule-settings';
+ import { ensurePackages, interopDefault } from '../utils';
+
+ // react refresh
+diff --git a/src/configs/regexp.ts b/src/configs/regexp.ts
+index 79bada7..5e49915 100644
+--- a/src/configs/regexp.ts
++++ b/src/configs/regexp.ts
+@@ -1,5 +1,4 @@
+ import type { OptionsOverrides, OptionsRegExp, TypedFlatConfigItem } from '../types';
+-
+ import { configs } from 'eslint-plugin-regexp';
+
+ export async function regexp(
+diff --git a/src/configs/sort.ts b/src/configs/sort.ts
+index bb9fadd..997426f 100644
+--- a/src/configs/sort.ts
++++ b/src/configs/sort.ts
+@@ -1,5 +1,5 @@
+ import type { TypedFlatConfigItem } from '../types';
+-import { ERROR } from '../rule-settings';
++import { ERROR } from '../constants';
+
+ /**
+  * Sort package.json
+diff --git a/src/configs/stylistic.ts b/src/configs/stylistic.ts
+index a08a955..2cd9822 100644
+--- a/src/configs/stylistic.ts
++++ b/src/configs/stylistic.ts
+@@ -3,9 +3,8 @@ import type {
+   StylisticConfig,
+   TypedFlatConfigItem,
+ } from '../types';
+-
++import { ERROR } from '../constants';
+ import { pluginFino } from '../plugins';
+-import { ERROR } from '../rule-settings';
+ import { interopDefault } from '../utils';
+
+ export const StylisticConfigDefaults: StylisticConfig = {
+diff --git a/src/configs/test.ts b/src/configs/test.ts
+index 15dbb28..7316298 100644
+--- a/src/configs/test.ts
++++ b/src/configs/test.ts
+@@ -1,6 +1,6 @@
+ import type { OptionsFiles, OptionsIsInEditor, OptionsOverrides, TypedFlatConfigItem } from '../types';
++import { ERROR, OFF } from '../constants';
+ import { GLOB_TESTS } from '../globs';
+-import { ERROR, OFF } from '../rule-settings';
+ import { interopDefault } from '../utils';
+
+ // Hold the reference so we don't redeclare the plugin on each call
+@@ -54,10 +54,10 @@ export async function test(
+
+         // Disables
+         ...{
++          '@typescript-eslint/explicit-function-return-type': OFF,
+           'fino/no-top-level-await': OFF,
+           'no-unused-expressions': OFF,
+           'node/prefer-global/process': OFF,
+-          'ts/explicit-function-return-type': OFF,
+         },
+
+         ...overrides,
+diff --git a/src/configs/toml.ts b/src/configs/toml.ts
+index cc78c5a..84b76d4 100644
+--- a/src/configs/toml.ts
++++ b/src/configs/toml.ts
+@@ -4,9 +4,8 @@ import type {
+   OptionsStylistic,
+   TypedFlatConfigItem,
+ } from '../types';
+-
++import { ERROR, OFF } from '../constants';
+ import { GLOB_TOML } from '../globs';
+-import { ERROR, OFF } from '../rule-settings';
+ import { interopDefault } from '../utils';
+
+ export async function toml(
+diff --git a/src/configs/typescript.ts b/src/configs/typescript.ts
+index 9c28095..3cc7c45 100644
+--- a/src/configs/typescript.ts
++++ b/src/configs/typescript.ts
+@@ -7,12 +7,16 @@ import type {
+   OptionsTypeScriptWithTypes,
+   TypedFlatConfigItem,
+ } from '../types';
+-
++import { createRequire } from 'node:module';
+ import process from 'node:process';
++import { ERROR, OFF } from '../constants';
+ import { GLOB_MARKDOWN, GLOB_TS, GLOB_TSX } from '../globs';
+ import { pluginFino } from '../plugins';
+-import { ERROR, OFF } from '../rule-settings';
+-import { interopDefault, renameRules } from '../utils';
++
++const require = createRequire(import.meta.url);
++
++const pluginTs = require('@typescript-eslint/eslint-plugin');
++const parserTs = require('@typescript-eslint/parser');
+
+ export async function typescript(
+   options: OptionsFiles &
+@@ -42,37 +46,32 @@ export async function typescript(
+   const isTypeAware = !!tsconfigPath;
+
+   const typeAwareRules: TypedFlatConfigItem['rules'] = {
+-    'dot-notation': OFF,
+-    'no-implied-eval': OFF,
+-    'ts/await-thenable': ERROR,
+-    'ts/dot-notation': [ERROR, { allowKeywords: true }],
+-    'ts/no-floating-promises': ERROR,
+-    'ts/no-for-in-array': ERROR,
+-    'ts/no-implied-eval': ERROR,
+-    'ts/no-misused-promises': ERROR,
+-    'ts/no-unnecessary-type-assertion': ERROR,
+-    'ts/no-unsafe-argument': ERROR,
+-    'ts/no-unsafe-assignment': ERROR,
+-    'ts/no-unsafe-call': ERROR,
+-    'ts/no-unsafe-member-access': ERROR,
+-    'ts/no-unsafe-return': ERROR,
+-    'ts/promise-function-async': ERROR,
+-    'ts/restrict-plus-operands': ERROR,
+-    'ts/restrict-template-expressions': ERROR,
+-    'ts/return-await': [ERROR, 'in-try-catch'],
+-    'ts/strict-boolean-expressions': [
++    '@typescript-eslint/await-thenable': ERROR,
++    '@typescript-eslint/dot-notation': [ERROR, { allowKeywords: true }],
++    '@typescript-eslint/no-floating-promises': ERROR,
++    '@typescript-eslint/no-for-in-array': ERROR,
++    '@typescript-eslint/no-implied-eval': ERROR,
++    '@typescript-eslint/no-misused-promises': ERROR,
++    '@typescript-eslint/no-unnecessary-type-assertion': ERROR,
++    '@typescript-eslint/no-unsafe-argument': ERROR,
++    '@typescript-eslint/no-unsafe-assignment': ERROR,
++    '@typescript-eslint/no-unsafe-call': ERROR,
++    '@typescript-eslint/no-unsafe-member-access': ERROR,
++    '@typescript-eslint/no-unsafe-return': ERROR,
++    '@typescript-eslint/promise-function-async': ERROR,
++    '@typescript-eslint/restrict-plus-operands': ERROR,
++    '@typescript-eslint/restrict-template-expressions': ERROR,
++    '@typescript-eslint/return-await': [ERROR, 'in-try-catch'],
++    '@typescript-eslint/strict-boolean-expressions': [
+       ERROR,
+       { allowNullableBoolean: true, allowNullableObject: true },
+     ],
+-    'ts/switch-exhaustiveness-check': ERROR,
+-    'ts/unbound-method': ERROR,
++    '@typescript-eslint/switch-exhaustiveness-check': ERROR,
++    '@typescript-eslint/unbound-method': ERROR,
++    'dot-notation': OFF,
++    'no-implied-eval': OFF,
+   };
+
+-  const [pluginTs, parserTs] = await Promise.all([
+-    interopDefault(import('@typescript-eslint/eslint-plugin')),
+-    interopDefault(import('@typescript-eslint/parser')),
+-  ] as const);
+-
+   function makeParser(
+     typeAware: boolean,
+     files: string[],
+@@ -107,8 +106,8 @@ export async function typescript(
+       // Install the plugins without globs, so they can be configured separately.
+       name: 'fino/typescript/setup',
+       plugins: {
+-        antfu: pluginFino,
+-        ts: pluginTs as any,
++        '@typescript-eslint': pluginTs as any,
++        'fino': pluginFino,
+       },
+     },
+     // assign type-aware parser for type-aware files and type-unaware parser for the rest
+@@ -122,42 +121,33 @@ export async function typescript(
+       files,
+       name: 'fino/typescript/rules',
+       rules: {
+-        ...renameRules(
+-          pluginTs.configs['eslint-recommended'].overrides![0].rules!,
+-          { '@typescript-eslint': 'ts' },
+-        ),
+-        ...renameRules(pluginTs.configs.strict.rules!, {
+-          '@typescript-eslint': 'ts',
+-        }),
+-        'no-dupe-class-members': OFF,
+-        'no-redeclare': OFF,
+-        'no-use-before-define': OFF,
+-        'no-useless-constructor': OFF,
+-        'ts/ban-ts-comment': [
++        ...pluginTs.configs['eslint-recommended'].overrides![0].rules!,
++        ...pluginTs.configs.strict.rules!,
++        '@typescript-eslint/ban-ts-comment': [
+           ERROR,
+           { 'ts-expect-error': 'allow-with-description' },
+         ],
+-        'ts/consistent-type-definitions': [ERROR, 'interface'],
+-        'ts/consistent-type-imports': [
++        '@typescript-eslint/consistent-type-definitions': [ERROR, 'interface'],
++        '@typescript-eslint/consistent-type-imports': [
+           ERROR,
+           {
+             disallowTypeAnnotations: false,
+             prefer: 'type-imports',
+           },
+         ],
++        '@typescript-eslint/method-signature-style': [ERROR, 'property'], // https://www.totaltypescript.com/method-shorthand-syntax-considered-harmful
++        '@typescript-eslint/no-dupe-class-members': ERROR,
++        '@typescript-eslint/no-dynamic-delete': OFF,
++        '@typescript-eslint/no-empty-object-type': [ERROR, { allowInterfaces: 'always' }],
+
+-        'ts/method-signature-style': [ERROR, 'property'], // https://www.totaltypescript.com/method-shorthand-syntax-considered-harmful
+-        'ts/no-dupe-class-members': ERROR,
+-        'ts/no-dynamic-delete': OFF,
+-        'ts/no-empty-object-type': [ERROR, { allowInterfaces: 'always' }],
+-        'ts/no-explicit-any': OFF,
+-        'ts/no-extraneous-class': OFF,
+-        'ts/no-import-type-side-effects': ERROR,
+-        'ts/no-invalid-void-type': OFF,
+-        'ts/no-non-null-assertion': OFF,
+-        'ts/no-redeclare': [ERROR, { builtinGlobals: false }],
+-        'ts/no-require-imports': ERROR,
+-        'ts/no-unused-expressions': [
++        '@typescript-eslint/no-explicit-any': OFF,
++        '@typescript-eslint/no-extraneous-class': OFF,
++        '@typescript-eslint/no-import-type-side-effects': ERROR,
++        '@typescript-eslint/no-invalid-void-type': OFF,
++        '@typescript-eslint/no-non-null-assertion': OFF,
++        '@typescript-eslint/no-redeclare': [ERROR, { builtinGlobals: false }],
++        '@typescript-eslint/no-require-imports': ERROR,
++        '@typescript-eslint/no-unused-expressions': [
+           ERROR,
+           {
+             allowShortCircuit: true,
+@@ -165,19 +155,23 @@ export async function typescript(
+             allowTernary: true,
+           },
+         ],
+-        'ts/no-unused-vars': OFF,
+-        'ts/no-use-before-define': [
++        '@typescript-eslint/no-unused-vars': OFF,
++        '@typescript-eslint/no-use-before-define': [
+           ERROR,
+           { classes: false, functions: false, variables: true },
+         ],
+-        'ts/no-useless-constructor': OFF,
+-        'ts/no-wrapper-object-types': ERROR,
+-        'ts/triple-slash-reference': OFF,
+-        'ts/unified-signatures': OFF,
++        '@typescript-eslint/no-useless-constructor': OFF,
++        '@typescript-eslint/no-wrapper-object-types': ERROR,
++        '@typescript-eslint/triple-slash-reference': OFF,
++        '@typescript-eslint/unified-signatures': OFF,
++        'no-dupe-class-members': OFF,
++        'no-redeclare': OFF,
++        'no-use-before-define': OFF,
++        'no-useless-constructor': OFF,
+
+         ...(type === 'lib'
+           ? {
+-              'ts/explicit-function-return-type': [
++              '@typescript-eslint/explicit-function-return-type': [
+                 ERROR,
+                 {
+                   allowExpressions: true,
+diff --git a/src/configs/unicorn.ts b/src/configs/unicorn.ts
+index 5eb31ec..8fb561d 100644
+--- a/src/configs/unicorn.ts
++++ b/src/configs/unicorn.ts
+@@ -1,6 +1,6 @@
+ import type { OptionsUnicorn, TypedFlatConfigItem } from '../types';
++import { ERROR } from '../constants';
+ import { pluginUnicorn } from '../plugins';
+-import { ERROR } from '../rule-settings';
+
+ export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatConfigItem[]> {
+   return [
+diff --git a/src/configs/unocss.ts b/src/configs/unocss.ts
+index d4c62d5..bd16586 100644
+--- a/src/configs/unocss.ts
++++ b/src/configs/unocss.ts
+@@ -1,5 +1,5 @@
+ import type { OptionsUnoCSS, TypedFlatConfigItem } from '../types';
+-import { ERROR, WARN } from '../rule-settings';
++import { ERROR, WARN } from '../constants';
+ import { ensurePackages, interopDefault } from '../utils';
+
+ export async function unocss(
+diff --git a/src/configs/yaml.ts b/src/configs/yaml.ts
+index a154c57..54166fc 100644
+--- a/src/configs/yaml.ts
++++ b/src/configs/yaml.ts
+@@ -4,8 +4,8 @@ import type {
+   OptionsStylistic,
+   TypedFlatConfigItem,
+ } from '../types';
++import { ERROR, OFF } from '../constants';
+ import { GLOB_YAML } from '../globs';
+-import { ERROR, OFF } from '../rule-settings';
+ import { interopDefault } from '../utils';
+
+ export async function yaml(
+diff --git a/src/rule-settings.ts b/src/constants.ts
+similarity index 100%
+rename from src/rule-settings.ts
+rename to src/constants.ts
+diff --git a/src/eslint.types.ts b/src/eslint.types.ts
+new file mode 100644
+index 0000000..c267fcb
+--- /dev/null
++++ b/src/eslint.types.ts
+@@ -0,0 +1,16 @@
++import type { TSESLint } from '@typescript-eslint/utils';
++import type { Linter } from 'eslint';
++
++// Extend the FlatConfig.Config type with additional properties
++export interface ESLintConfig extends TSESLint.FlatConfig.Config {
++  extends?: Array<string | TSESLint.FlatConfig.Config>;
++}
++
++export type ESLintRules = Linter.RulesRecord;
++
++export interface PresetOptions {
++  typescript?: boolean;
++  react?: boolean;
++  // emotion?: boolean;
++  prettier?: boolean;
++}
+diff --git a/src/factory.ts b/src/factory.ts
+index 9926002..c55bf22 100644
+--- a/src/factory.ts
++++ b/src/factory.ts
+@@ -1,24 +1,20 @@
+ import type { Linter } from 'eslint';
+ import type { RuleOptions } from './typegen';
+-import type {
+-  Awaitable,
+-  ConfigNames,
+-  OptionsConfig,
+-  TypedFlatConfigItem,
+-} from './types';
+-
++import type { Awaitable, ConfigNames, OptionsConfig, TypedFlatConfigItem } from './types';
+ import { FlatConfigComposer } from 'eslint-flat-config-utils';
+ import { isPackageExists } from 'local-pkg';
+ import {
+   command,
+   comments,
+   disables,
++  // emotion,
+   ignores,
+   imports,
+   javascript,
+   jsdoc,
+   jsonc,
+   jsx,
++  // lodash,
+   markdown,
+   node,
+   perfectionist,
+@@ -53,7 +49,6 @@ export const defaultPluginRenaming = {
+   '@eslint-react/hooks-extra': 'react-hooks-extra',
+   '@eslint-react/naming-convention': 'react-naming-convention',
+   '@stylistic': '@stylistic',
+-  '@typescript-eslint': '@typescript-eslint',
+   'import-x': 'import-x',
+   'n': 'n',
+   'vitest': 'vitest',
+@@ -73,10 +68,7 @@ export const defaultPluginRenaming = {
+ export function fino(
+   options: OptionsConfig & Omit<TypedFlatConfigItem, 'files'> = {},
+   ...userConfigs: Awaitable<
+-    | TypedFlatConfigItem
+-    | TypedFlatConfigItem[]
+-    | FlatConfigComposer<any, any>
+-    | Linter.Config[]
++    TypedFlatConfigItem | TypedFlatConfigItem[] | FlatConfigComposer<any, any> | Linter.Config[]
+   >[]
+ ): FlatConfigComposer<TypedFlatConfigItem, ConfigNames> {
+   const {
+@@ -96,18 +88,12 @@ export function fino(
+     isInEditor = isInEditorEnv();
+     if (isInEditor) {
+       // eslint-disable-next-line no-console
+-      console.log(
+-        '[@finografic/eslint-config] Detected running in editor, some rules are disabled.',
+-      );
++      console.log('[@finografic/eslint-config] Detected running in editor, some rules are disabled.');
+     }
+   }
+
+   const stylisticOptions
+-    = options.stylistic === false
+-      ? false
+-      : typeof options.stylistic === 'object'
+-        ? options.stylistic
+-        : {};
++    = options.stylistic === false ? false : typeof options.stylistic === 'object' ? options.stylistic : {};
+
+   if (stylisticOptions && !('jsx' in stylisticOptions))
+     stylisticOptions.jsx = enableJsx;
+@@ -138,10 +124,7 @@ export function fino(
+   }
+
+   const typescriptOptions = resolveSubOptions(options, 'typescript');
+-  const tsconfigPath
+-    = 'tsconfigPath' in typescriptOptions
+-      ? typescriptOptions.tsconfigPath
+-      : undefined;
++  const tsconfigPath = 'tsconfigPath' in typescriptOptions ? typescriptOptions.tsconfigPath : undefined;
+
+   // Base configs
+   configs.push(
+@@ -152,6 +135,7 @@ export function fino(
+     }),
+     comments(),
+     node(),
++    // lodash(),
+     jsdoc({
+       stylistic: stylisticOptions,
+     }),
+@@ -213,6 +197,7 @@ export function fino(
+         overrides: getOverrides(options, 'react'),
+         tsconfigPath,
+       }),
++      // emotion(),
+     );
+   }
+
+@@ -265,10 +250,7 @@ export function fino(
+
+   if (options.formatters) {
+     configs.push(
+-      formatters(
+-        options.formatters,
+-        typeof stylisticOptions === 'boolean' ? {} : stylisticOptions,
+-      ),
++      formatters(options.formatters, typeof stylisticOptions === 'boolean' ? {} : stylisticOptions),
+     );
+   }
+
+@@ -276,7 +258,7 @@ export function fino(
+
+   if ('files' in options) {
+     throw new Error(
+-      '[@antfu/eslint-config] The first argument should not contain the "files" property as the options are supposed to be global. Place it in the second or later config instead.',
++      '[@finografic/eslint-config] The first argument should not contain the "files" property as the options are supposed to be global. Place it in the second or later config instead.',
+     );
+   }
+
+diff --git a/src/globs.ts b/src/globs.ts
+index 308218a..d3fa299 100644
+--- a/src/globs.ts
++++ b/src/globs.ts
+@@ -26,6 +26,9 @@ export const GLOB_SVG = '**/*.svg';
+ export const GLOB_HTML = '**/*.htm?(l)';
+ export const GLOB_GRAPHQL = '**/*.{g,graph}ql';
+
++export const GLOB_ESLINT_FILES = ['**/eslint.config.*'];
++export const GLOB_VITE_FILES = ['vite.config.*', 'vite.config-debug.*'];
++
+ export const GLOB_MARKDOWN_CODE = `${GLOB_MARKDOWN}/${GLOB_SRC}`;
+
+ export const GLOB_TESTS = [
+@@ -54,7 +57,6 @@ export const GLOB_EXCLUDE = [
+   '**/yarn.lock',
+   '**/pnpm-lock.yaml',
+   '**/bun.lockb',
+-
+   '**/output',
+   '**/coverage',
+   '**/temp',
+diff --git a/src/index.ts b/src/index.ts
+index 10b0228..027d527 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -1,18 +1,9 @@
+ import { fino } from './factory';
+
+ export * from './configs';
++export { ERROR, GLOB_ESLINT_FILES, IGNORES, INCLUDE_FILES_JS, INCLUDE_FILES_TS, OFF, GLOB_VITE_FILES, WARN } from './constants';
+ export * from './factory';
+ export * from './globs';
+-export {
+-  ERROR,
+-  GLOB_ESLINT_FILES,
+-  IGNORES,
+-  INCLUDE_FILES_JS,
+-  INCLUDE_FILES_TS,
+-  OFF,
+-  GLOB_VITE_FILES,
+-  WARN,
+-} from './rule-settings';
+ export * from './types';
+ export * from './utils';
+
+diff --git a/src/plugins/fino/rules/consistent-chaining.ts b/src/plugins/fino/rules/consistent-chaining.ts
+index dcc1b23..834084c 100644
+--- a/src/plugins/fino/rules/consistent-chaining.ts
++++ b/src/plugins/fino/rules/consistent-chaining.ts
+@@ -1,4 +1,4 @@
+-import type { TSESTree } from '@typescript-eslint/utils';
++import type { TSESLint } from '@typescript-eslint/utils';
+ import { createEslintRule } from '../utils';
+
+ export const RULE_NAME = 'consistent-chaining';
+@@ -10,7 +10,7 @@ export type Options = [
+ ];
+
+ export default createEslintRule<Options, MessageIds>({
+-  create: (context) => {
++  create: (context: any) => {
+     const knownRoot = new WeakSet<any>();
+
+     const {
+@@ -18,16 +18,16 @@ export default createEslintRule<Options, MessageIds>({
+     } = context.options[0] || {};
+
+     return {
+-      MemberExpression(node) {
+-        let root: TSESTree.Node = node;
++      MemberExpression(node: TSESLint.MemberExpression) {
++        let root: TSESLint.Node = node;
+         while (root.parent && (root.parent.type === 'MemberExpression' || root.parent.type === 'CallExpression'))
+           root = root.parent;
+         if (knownRoot.has(root))
+           return;
+         knownRoot.add(root);
+
+-        const members: TSESTree.MemberExpression[] = [];
+-        let current: TSESTree.Node | undefined = root;
++        const members: TSESLint.MemberExpression[] = [];
++        let current: TSESLint.Node | undefined = root;
+         while (current) {
+           switch (current.type) {
+             case 'MemberExpression': {
+@@ -75,7 +75,7 @@ export default createEslintRule<Options, MessageIds>({
+               data: {
+                 name: root.type,
+               },
+-              fix(fixer) {
++              fix(fixer: any) {
+                 if (mode === 'multi')
+                   return fixer.insertTextAfter(tokenBefore, '\n');
+                 else
+diff --git a/src/plugins/fino/rules/consistent-list-newline.ts b/src/plugins/fino/rules/consistent-list-newline.ts
+index b626bf5..7f1e96c 100644
+--- a/src/plugins/fino/rules/consistent-list-newline.ts
++++ b/src/plugins/fino/rules/consistent-list-newline.ts
+@@ -325,5 +325,5 @@ export default createEslintRule<Options, MessageIds>({
+   name: RULE_NAME,
+ });
+
+-// eslint-disable-next-line unused-imports/no-unused-vars, ts/explicit-function-return-type
++// eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/explicit-function-return-type
+ function exportType<A, B extends A>() {}
+diff --git a/src/plugins/fino/rules/top-level-function.ts b/src/plugins/fino/rules/top-level-function.ts
+index 57851c6..703fdb8 100644
+--- a/src/plugins/fino/rules/top-level-function.ts
++++ b/src/plugins/fino/rules/top-level-function.ts
+@@ -56,10 +56,7 @@ export default createEslintRule<Options, MessageIds>({
+             const textAsync = arrowFn.async ? 'async ' : '';
+
+             const final = `${textAsync}function ${textName} ${textGeneric}(${textArgs})${textTypeReturn} ${textBody}`;
+-            // console.log({
+-            //   input: code.slice(node.range[0], node.range[1]),
+-            //   output: final,
+-            // })
++
+             return fixer.replaceTextRange([node.range[0], node.range[1]], final);
+           },
+           loc: {
+diff --git a/src/plugins/index.ts b/src/plugins/index.ts
+index 947d438..89ca5ed 100644
+--- a/src/plugins/index.ts
++++ b/src/plugins/index.ts
+@@ -1,9 +1,11 @@
+-// eslint-disable-next-line ts/ban-ts-comment
++// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+ // @ts-nocheck
+
+ export { default as pluginFino } from './fino';
++// export * as pluginEmotion from '@emotion/eslint-plugin';
+ export { default as pluginComments } from '@eslint-community/eslint-plugin-eslint-comments';
+ export * as pluginImport from 'eslint-plugin-import-x';
++export { default as pluginLodash } from 'eslint-plugin-lodash';
+ export { default as pluginNode } from 'eslint-plugin-n';
+ export { default as pluginPerfectionist } from 'eslint-plugin-perfectionist';
+ export { default as pluginUnicorn } from 'eslint-plugin-unicorn';
+diff --git a/src/utils.ts b/src/utils.ts
+index a4ac802..c61a377 100644
+--- a/src/utils.ts
++++ b/src/utils.ts
+@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
+ import { isPackageExists } from 'local-pkg';
+
+ const scopeUrl = fileURLToPath(new URL('.', import.meta.url));
+-const isCwdInScope = isPackageExists('@antfu/eslint-config');
++const isCwdInScope = isPackageExists('@finografic/eslint-config');
+
+ export const parserPlain = {
+   meta: {
+@@ -42,7 +42,7 @@ export async function combine(...configs: Awaitable<TypedFlatConfigItem | TypedF
+  *
+  * @example
+  * ```ts
+- * import { renameRules } from '@antfu/eslint-config'
++ * import { renameRules } from '@finografic/eslint-config'
+  *
+  * export default [{
+  *   rules: renameRules(
+@@ -75,7 +75,7 @@ export function renameRules(
+  *
+  * @example
+  * ```ts
+- * import { renamePluginInConfigs } from '@antfu/eslint-config'
++ * import { renamePluginInConfigs } from '@finografic/eslint-config'
+  * import someConfigs from './some-configs'
+  *
+  * export default renamePluginInConfigs(someConfigs, {

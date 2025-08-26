@@ -1,0 +1,137 @@
+# TODO: REVIEW - `eslint-pllugin-react-x`
+
+<https://eslint-react.xyz/docs/rules/overview#core-rules>
+
+## example usage
+
+```ts
+// eslint.config.js
+
+// @ts-check
+import js from '@eslint/js';
+import react from 'eslint-plugin-react-x';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config({
+  extends: [
+    js.configs.recommended,
+    tseslint.configs.recommended,
+    react.configs.recommended,
+  ],
+  files: ['**/*.ts', '**/*.tsx'],
+  languageOptions: {
+    parser: tseslint.parser,
+    parserOptions: {
+      projectService: true,
+    },
+  },
+  rules: {
+    // Put rules you want to override here
+    'react-x/no-class-component': 'warn',
+  },
+});
+```
+
+---
+
+## `package.json`
+
+```json
+{
+  "name": "eslint-plugin-react-x",
+  "version": "1.39.0-next.3",
+  "description": "A set of composable linting rules for libraries and frameworks that use React as a UI runtime.",
+  "keywords": [
+    "react",
+    "eslint",
+    "eslint-react",
+    "eslint-plugin",
+    "eslint-plugin-react-x"
+  ],
+  "homepage": "https://github.com/Rel1cx/eslint-react",
+  "bugs": {
+    "url": "https://github.com/Rel1cx/eslint-react/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rel1cx/eslint-react.git",
+    "directory": "packages/plugins/eslint-plugin-react-x"
+  },
+  "license": "MIT",
+  "author": "Eva1ent<rel1cx@proton.me>",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "./package.json"
+  ],
+  "scripts": {
+    "build": "tsup --dts-resolve",
+    "lint:publish": "publint",
+    "lint:ts": "tsc --noEmit",
+    "publish": "pnpm run build && pnpm run lint:publish"
+  },
+  "dependencies": {
+    "@eslint-react/ast": "workspace:*",
+    "@eslint-react/core": "workspace:*",
+    "@eslint-react/eff": "workspace:*",
+    "@eslint-react/jsx": "workspace:*",
+    "@eslint-react/kit": "workspace:*",
+    "@eslint-react/shared": "workspace:*",
+    "@eslint-react/var": "workspace:*",
+    "@typescript-eslint/scope-manager": "^8.28.0",
+    "@typescript-eslint/type-utils": "^8.28.0",
+    "@typescript-eslint/types": "^8.28.0",
+    "@typescript-eslint/utils": "^8.28.0",
+    "compare-versions": "^6.1.1",
+    "is-immutable-type": "^5.0.1",
+    "string-ts": "^2.2.1",
+    "ts-pattern": "^5.7.0"
+  },
+  "devDependencies": {
+    "@local/configs": "workspace:*",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "ts-api-utils": "^2.1.0",
+    "tsup": "^8.4.0"
+  },
+  "peerDependencies": {
+    "eslint": "^8.57.0 || ^9.0.0",
+    "ts-api-utils": "^2.1.0",
+    "typescript": "^4.9.5 || ^5.3.3"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": false
+    },
+    "ts-api-utils": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "bun": ">=1.0.15",
+    "node": ">=18.18.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
+```

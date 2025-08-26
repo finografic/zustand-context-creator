@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "baseUrl": ".",
+    // "paths": {
+    //   "configs": [
+    //     "./src/configs"
+    //   ],
+    //   "configs/*": [
+    //     "./src/configs/*"
+    //   ],
+    //   "constants": [
+    //     "./src/constants.ts"
+    //   ],
+    //   "plugins": [
+    //     "./src/plugins"
+    //   ],
+    //   "plugins/*": [
+    //     "./src/plugins/*"
+    //   ],
+    //   "types": [
+    //     "./src/types"
+    //   ],
+    //   "types/*": [
+    //     "./src/types/*"
+    //   ],
+    //   "utils": [
+    //     "./src/utils"
+    //   ],
+    //   "utils/*": [
+    //     "./src/utils/*"
+    //   ]
+    // },
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
