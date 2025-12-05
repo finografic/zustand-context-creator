@@ -1,8 +1,8 @@
-import { defineConfig } from 'tsup';
 import type { Options } from 'tsup';
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/cli.ts'],
+  entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
   shims: true,
 } satisfies Options);
