@@ -1,0 +1,23 @@
+# Cursor AI Assistant Rules for @finografic Packages
+
+## Package Development
+
+- This is a standalone npm package, not a monorepo
+- Use TypeScript throughout with strict mode
+- Follow existing patterns and conventions
+- Focus on creating reusable, well-typed utilities
+
+## Development Workflow
+
+- DO NOT start development servers unless explicitly requested
+- The user manages their own development instances
+- Focus on code quality, type safety, and maintainability
+- Ensure all exports are properly typed and documented
+
+## Project Structure
+
+- Source code in `src/`
+- Built output in `dist/`
+- Examples in `src/utils/examples/`
+- Use TypeScript throughout
+- Follow existing patterns and conventions
