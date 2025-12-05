@@ -2,7 +2,7 @@
   "name": "@finografic/zustand-context-creator",
   "type": "module",
   "version": "0.1.1",
-  "description": "Fingorafic Zustix Context Creator",
+  "description": "Fingorafic Zustax - Zustand Context Creator",
   "author": {
     "name": "Justin",
     "email": "justin.blair.rankin@gmail.com",
@@ -48,8 +48,6 @@
     "docs.md": "pnpm docs.md.clean && pnpm docs.md.build",
     "docs.md.clean": "del './docs/**/*.md'",
     "docs.md.build": "NODE_PATH=./node_modules tsx scripts/generate-md-docs",
-    "docs.md.build.V1": "NODE_PATH=./node_modules tsx scripts-V1/generate-md-docs.ts",
-    "docs.md.build.V1.ORIG": "NODE_PATH=./node_modules tsx scripts/generate-md-docs-V1.ts",
     "docs.press": "pnpm docs.press.clean && pnpm docs.press.build",
     "docs.press.clean": "del './docs/.vitepress/{cache,dist}'",
     "docs.press.build": "vitepress build docs",
@@ -87,38 +85,6 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "prettier-plugin-astro": "^0.14.0"
-  },
-  "peerDependenciesMeta": {
-    "@eslint-react/eslint-plugin": {
-      "optional": true
-    },
-    "@prettier/plugin-xml": {
-      "optional": true
-    },
-    "@unocss/eslint-plugin": {
-      "optional": true
-    },
-    "astro-eslint-parser": {
-      "optional": true
-    },
-    "eslint-plugin-astro": {
-      "optional": true
-    },
-    "eslint-plugin-format": {
-      "optional": true
-    },
-    "eslint-plugin-react-hooks": {
-      "optional": true
-    },
-    "eslint-plugin-react-refresh": {
-      "optional": true
-    },
-    "eslint-plugin-vuejs-accessibility": {
-      "optional": true
-    },
-    "prettier-plugin-astro": {
-      "optional": true
-    }
   },
   "dependencies": {
     "@antfu/utils": "^9.2.0",
