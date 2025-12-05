@@ -54,12 +54,12 @@ This project uses a two-tier system for Cursor AI Assistant rules:
 
 **Current Files**:
 - `00-general.md` - General coding principles
-- `06-file-naming.md` - File/folder naming conventions
-- `07-typescript-patterns.md` - TypeScript best practices
-- `09-provider-context-patterns.md` - Zustand/Context patterns (core to this package)
-- `10-eslint-code-style.md` - ESLint configuration rules
-- `11-documentation.md` - Documentation standards
-- `14-modern-typescript-patterns.md` - Advanced TypeScript patterns
+- `01-file-naming.md` - File/folder naming conventions
+- `02-typescript-patterns.md` - TypeScript best practices
+- `03-provider-context-patterns.md` - Zustand/Context patterns (core to this package)
+- `04-eslint-code-style.md` - ESLint configuration rules
+- `05-documentation.md` - Documentation standards
+- `06-modern-typescript-patterns.md` - Advanced TypeScript patterns
 
 **When to Add Rules Here**:
 - ✅ Specific to this package's codebase
@@ -157,10 +157,12 @@ const example = () => { }
 4. **Applies contextually** - uses relevant rules for the current task
 
 When you ask me to:
-- ✅ "Create a new store" → I check `09-provider-context-patterns.md`
+- ✅ "Create a new store" → I check `03-provider-context-patterns.md`
 - ✅ "Fix the build" → I check `.cursorrules` for process rules
-- ✅ "Sort imports" → I check `10-eslint-code-style.md`
-- ✅ "Add types" → I check `07-typescript-patterns.md`
+- ✅ "Sort imports" → I check `04-eslint-code-style.md`
+- ✅ "Add types" → I check `02-typescript-patterns.md`
+- ✅ "Name a file" → I check `01-file-naming.md`
+- ✅ "Document code" → I check `05-documentation.md`
 
 ---
 

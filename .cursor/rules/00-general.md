@@ -9,9 +9,9 @@
 - Prefer explicit return types for functions
 - Use meaningful variable and function names that describe their purpose
 - For both JSDoc and simple comments, include name and version of model used to generate, between square-brackets [Model vX.X]
-- Follow TypeScript parameter patterns from `07-typescript-patterns.md`
-- Follow provider/context patterns from `09-provider-context-patterns.md`
-- Follow documentation patterns from `11-documentation.md`
+- Follow TypeScript parameter patterns from `02-typescript-patterns.md`
+- Follow provider/context patterns from `03-provider-context-patterns.md`
+- Follow documentation patterns from `05-documentation.md`
 
 ## Error Handling
 
