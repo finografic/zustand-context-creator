@@ -40,7 +40,7 @@
     "publish.github.minor": "pnpm prepublish.github && dotenvx run -- pnpm version minor && pnpm publish --registry https://npm.pkg.github.com",
     "publish.github.major": "pnpm prepublish.github && dotenvx run -- pnpm version major && pnpm publish --registry https://npm.pkg.github.com",
     "·········· REGISTRIES": "··············································",
-    "view.registry.gitub": "dotenvx run -- pnpm view @finografic/eslint-config --registry=https://npm.pkg.github.com",
+    "view.registry.gitub": "dotenvx run -- pnpm view @finografic/zustand-context-creator --registry=https://npm.pkg.github.com",
     "·········· UPDATE.DEPS": "·····················································",
     "upgrade.deps.all": "pnpm update --latest",
     "·········· UTILS": "·····················································",
