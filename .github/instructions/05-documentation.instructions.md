@@ -1,0 +1,1 @@
+../../.cursor/rules/05-documentation.md

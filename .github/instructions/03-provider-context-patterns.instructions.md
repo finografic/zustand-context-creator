@@ -1,0 +1,1 @@
+../../.cursor/rules/03-provider-context-patterns.md

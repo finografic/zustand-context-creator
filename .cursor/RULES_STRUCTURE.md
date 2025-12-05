@@ -185,3 +185,45 @@ This package (`@finografic/zustand-context-creator`) is a utility library for cr
 - **Code quality** - Clean, maintainable utility code
 - **Documentation** - Clear API documentation for library users
 
+---
+
+## Sharing Rules with GitHub Copilot
+
+This project shares rules between **Cursor** and **GitHub Copilot** using symlinks:
+
+### Structure
+
+- **Source of Truth**: `.cursor/rules/*.md` (Cursor rules)
+- **Copilot Access**: `.github/instructions/*.instructions.md` (symlinks to Cursor rules)
+- **Copilot Main File**: `.github/copilot-instructions.md` (references the instruction files)
+
+### How It Works
+
+1. **Cursor** reads `.cursorrules` and `.cursor/rules/*.md` directly
+2. **GitHub Copilot** reads `.github/copilot-instructions.md` which references `.github/instructions/*.instructions.md`
+3. The `.github/instructions/` files are **symlinks** pointing to `.cursor/rules/`
+4. **Single source of truth** - edit files in `.cursor/rules/` and both tools use them
+
+### Maintenance
+
+- ✅ **Edit rules in `.cursor/rules/`** - This is the source of truth
+- ✅ **Symlinks auto-update** - Changes are immediately available to both tools
+- ✅ **No duplication** - One set of files, two tools
+- ⚠️ **If adding new rules** - Create the file in `.cursor/rules/`, then create a symlink:
+
+  ```bash
+  ln -s ../../.cursor/rules/NN-new-rule.md .github/instructions/NN-new-rule.instructions.md
+  ```
+
+### File Mapping
+
+| Cursor File | Copilot Symlink |
+|------------|----------------|
+| `.cursor/rules/00-general.md` | `.github/instructions/00-general.instructions.md` |
+| `.cursor/rules/01-file-naming.md` | `.github/instructions/01-file-naming.instructions.md` |
+| `.cursor/rules/02-typescript-patterns.md` | `.github/instructions/02-typescript-patterns.instructions.md` |
+| `.cursor/rules/03-provider-context-patterns.md` | `.github/instructions/03-provider-context-patterns.instructions.md` |
+| `.cursor/rules/04-eslint-code-style.md` | `.github/instructions/04-eslint-code-style.instructions.md` |
+| `.cursor/rules/05-documentation.md` | `.github/instructions/05-documentation.instructions.md` |
+| `.cursor/rules/06-modern-typescript-patterns.md` | `.github/instructions/06-modern-typescript-patterns.instructions.md` |
+

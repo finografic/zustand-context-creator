@@ -1,0 +1,1 @@
+../../.cursor/rules/06-modern-typescript-patterns.md

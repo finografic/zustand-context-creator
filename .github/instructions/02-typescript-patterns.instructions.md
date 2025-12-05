@@ -1,0 +1,1 @@
+../../.cursor/rules/02-typescript-patterns.md
