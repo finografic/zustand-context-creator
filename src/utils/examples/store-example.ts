@@ -1,11 +1,13 @@
-import { createStore } from '@your-scope/zustand-store-creator';
+/* eslint-disable ts/ban-ts-comment */
+// @ts-nocheck - Example file with placeholder API
+import { createStore } from '@finografic/zustand-context-creator';
 
 // Define your types
-type TodoItem = {
-  id: string;
-  text: string;
-  completed: boolean;
-};
+interface TodoItem {
+  id: string
+  text: string
+  completed: boolean
+}
 
 type FilterType = 'all' | 'active' | 'completed';
 
@@ -35,16 +37,17 @@ const todoStore = createStore({
 
     // Action with computed state
     toggleTodo: (state, id: string) => ({
-      items: state.items.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)),
+      items: state.items.map(item => (item.id === id ? { ...item, completed: !item.completed } : item)),
     }),
 
     // Async action example
     async fetchTodos(state) {
       state.setIsLoading(true);
       try {
-        const todos = await fetch('/api/todos').then((r) => r.json());
+        const todos = await fetch('/api/todos').then(r => r.json());
         return { items: todos, isLoading: false };
-      } catch (error) {
+      }
+      catch (_error) {
         return { isLoading: false };
       }
     },

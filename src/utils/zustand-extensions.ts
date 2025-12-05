@@ -1,39 +1,35 @@
-import { type StoreApi } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import type { StoreApi } from 'zustand';
 
 // Reset capability
-export const withReset = <T extends object>(initialState: T, config = { blacklist: [] as (keyof T)[] }) => {
+export function withReset<T extends object>(initialState: T, config = { blacklist: [] as (keyof T)[] }) {
   return (set: StoreApi<T>['setState']) => ({
     reset: () => {
       const resetState = Object.entries(initialState).reduce((acc, [key, value]) => {
         if (!config.blacklist.includes(key as keyof T)) {
-          acc[key] = value;
+          (acc as Record<string, unknown>)[key] = value;
         }
         return acc;
       }, {} as Partial<T>);
-      set(resetState, true);
+      set(resetState as T, true);
     },
   });
-};
+}
 
 // Persistence middleware creator
-export const createPersist = <T extends object>(
-  key: string,
-  options = {
-    whitelist: [] as (keyof T)[],
-    blacklist: [] as (keyof T)[],
-  },
-) => {
+export function createPersist<T extends object>(key: string, options = {
+  whitelist: [] as (keyof T)[],
+  blacklist: [] as (keyof T)[],
+}) {
   return (set: StoreApi<T>['setState'], get: StoreApi<T>['getState']) => ({
     persist: {
       save: () => {
         const state = get();
         const persistedState = Object.entries(state).reduce((acc, [key, value]) => {
           if (
-            (options.whitelist.length === 0 || options.whitelist.includes(key as keyof T)) &&
-            !options.blacklist.includes(key as keyof T)
+            (options.whitelist.length === 0 || options.whitelist.includes(key as keyof T))
+            && !options.blacklist.includes(key as keyof T)
           ) {
-            acc[key] = value;
+            (acc as Record<string, unknown>)[key] = value;
           }
           return acc;
         }, {} as Partial<T>);
@@ -47,10 +43,10 @@ export const createPersist = <T extends object>(
       },
     },
   });
-};
+}
 
 // Action batching
-export const createBatchActions = <T extends object>() => {
+export function createBatchActions<T extends object>() {
   return (set: StoreApi<T>['setState'], get: StoreApi<T>['getState']) => {
     let batchQueue: Array<() => Partial<T>> = [];
     let isBatching = false;
@@ -61,7 +57,8 @@ export const createBatchActions = <T extends object>() => {
           isBatching = true;
         },
         commit: () => {
-          if (!isBatching) return;
+          if (!isBatching)
+            return;
 
           const state = get();
           const newState = batchQueue.reduce((acc, action) => ({ ...acc, ...action() }), state);
@@ -73,11 +70,12 @@ export const createBatchActions = <T extends object>() => {
         addAction: (action: () => Partial<T>) => {
           if (isBatching) {
             batchQueue.push(action);
-          } else {
+          }
+          else {
             set(action());
           }
         },
       },
     };
   };
-};
+}
