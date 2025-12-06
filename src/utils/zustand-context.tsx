@@ -8,7 +8,9 @@ import React, { createContext } from 'react';
  * @param getStore - Function that creates the store with optional initial value
  * @returns Context object with Provider, Context, and useContext hook
  */
-export function createZustandContext<TInitial extends object, TStore extends StoreApi<any>>(getStore: (props: { initialValue?: Partial<TInitial> }) => TStore) {
+export function createZustandContext<TInitial extends object, TStore extends StoreApi<any>>(
+  getStore: (props: { initialValue?: Partial<TInitial> }) => TStore,
+) {
   const Context = createContext<TStore | null>(null);
 
   const Provider = ({
