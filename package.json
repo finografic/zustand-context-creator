@@ -10,6 +10,10 @@
     "url": "http://finografic.github.com/cv-justin-rankin"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finografic/zustand-context-creator.git"
+  },
   "keywords": [
     "zustex",
     "zustand",
@@ -26,10 +30,6 @@
   "files": [
     "dist"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/finografic/zustand-context-creator.git"
-  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -43,13 +43,11 @@
     "lint.fix": "eslint . --fix",
     "·········· PUBLISH.GITHUB": "·····················································",
     "prepublish.github": "pnpm build && git add dist/** && git commit -m \"chore: update generated files\" || true",
-    "publish.github.patch": "pnpm prepublish.github && dotenvx run -- pnpm version patch && pnpm publish --registry https://npm.pkg.github.com",
-    "publish.github.minor": "pnpm prepublish.github && dotenvx run -- pnpm version minor && pnpm publish --registry https://npm.pkg.github.com",
-    "publish.github.major": "pnpm prepublish.github && dotenvx run -- pnpm version major && pnpm publish --registry https://npm.pkg.github.com",
-    "publish.github.gh.patch": "pnpm prepublish.github && dotenvx run -- pnpm version patch && pnpm publish --registry https://npm.pkg.github.com && git push origin --tags && gh release create \"$(git describe --tags --abbrev=0)\" --title \"$(git describe --tags --abbrev=0)\" --notes \"Release $(git describe --tags --abbrev=0)\"",
-    "publish.github.gh.minor": "pnpm prepublish.github && dotenvx run -- pnpm version minor && pnpm publish --registry https://npm.pkg.github.com && git push origin --tags && gh release create \"$(git describe --tags --abbrev=0)\" --title \"$(git describe --tags --abbrev=0)\" --notes \"Release $(git describe --tags --abbrev=0)\"",
-    "publish.github.gh.major": "pnpm prepublish.github && dotenvx run -- pnpm version major && pnpm publish --registry https://npm.pkg.github.com && git push origin --tags && gh release create \"$(git describe --tags --abbrev=0)\" --title \"$(git describe --tags --abbrev=0)\" --notes \"Release $(git describe --tags --abbrev=0)\"",
-    "publish.github.gh": "pnpm publish --registry https://npm.pkg.github.com && git push origin --tags && gh release create \"$(git describe --tags --abbrev=0)\" --title \"$(git describe --tags --abbrev=0)\" --notes \"Release $(git describe --tags --abbrev=0)\"",
+    "publish.github.gh.patch": "pnpm prepublish.github && dotenvx run -- pnpm version patch && pnpm publish --registry https://npm.pkg.github.com && pnpm run publish.github.gh.post",
+    "publish.github.gh.minor": "pnpm prepublish.github && dotenvx run -- pnpm version minor && pnpm publish --registry https://npm.pkg.github.com && pnpm run publish.github.gh.post",
+    "publish.github.gh.major": "pnpm prepublish.github && dotenvx run -- pnpm version major && pnpm publish --registry https://npm.pkg.github.com && pnpm run publish.github.gh.post",
+    "publish.github.gh": "pnpm publish --registry https://npm.pkg.github.com && pnpm run publish.github.gh.post",
+    "publish.github.gh.post": "git push origin --tags && gh release create \"$(git describe --tags --abbrev=0)\" --title \"$(git describe --tags --abbrev=0)\" --notes \"Release $(git describe --tags --abbrev=0)\"",
     "·········· REGISTRIES": "··············································",
     "view.registry.gitub": "dotenvx run -- pnpm view @finografic/zustand-context-creator --registry=https://npm.pkg.github.com",
     "·········· UPDATE.DEPS": "·····················································",
