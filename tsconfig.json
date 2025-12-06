@@ -12,6 +12,6 @@
     "verbatimModuleSyntax": true,
     "baseUrl": "."
   },
-  "include": ["**/*.ts", "**/*.tsx", "tsup.config.ts"],
-  "exclude": ["src/utils/examples/**/*"]
+  "include": ["**/*.ts", "**/*.tsx", "tsup.config.ts", "vitest.config.ts", "tests/**/*"],
+  "exclude": ["src/utils/examples/**/*", "node_modules", "dist"]
 }
