@@ -26,6 +26,13 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finografic/zustand-context-creator.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "========== DEV": "=======================================================",
     "watch": "tsup --format esm,cjs --watch",
