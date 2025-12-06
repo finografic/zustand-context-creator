@@ -1,7 +1,7 @@
 {
   "name": "@finografic/zustand-context-creator",
   "type": "module",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "packageManager": "pnpm@10.0.0",
   "description": "Fingorafic Zustax - Zustand Context Creator",
   "author": {
@@ -42,7 +42,8 @@
     "·········· REGISTRIES": "··············································",
     "view.registry.gitub": "dotenvx run -- pnpm view @finografic/zustand-context-creator --registry=https://npm.pkg.github.com",
     "·········· UPDATE.DEPS": "·····················································",
-    "upgrade.deps.all": "pnpm update --latest",
+    "upgrade.deps.v1": "pnpm update --latest",
+    "upgrade.deps.all": "node scripts/update-deps.mjs",
     "·········· RULES": "·············································",
     "rules:install": "pnpm exec install-cursor-rules",
     "rules:sync": "pnpm exec install-cursor-rules",
@@ -59,7 +60,7 @@
     "@antfu/eslint-config": "6.4.2",
     "@antfu/ni": "24.3.0",
     "@dotenvx/dotenvx": "1.51.1",
-    "@finografic/ai-rules": "0.2.0",
+    "@finografic/ai-rules": "0.3.0",
     "@finografic/eslint-config": "9.18.4",
     "@types/node": "22.15.17",
     "eslint": "^9.26.0",
