@@ -21,6 +21,9 @@ importers:
       '@dotenvx/dotenvx':
         specifier: 1.51.1
         version: 1.51.1
+      '@finografic/ai-rules':
+        specifier: 0.2.0
+        version: 0.2.0
       '@finografic/eslint-config':
         specifier: 9.18.4
         version: 9.18.4(@prettier/plugin-xml@3.4.2(prettier@3.7.4))(@types/node@22.15.17)(@typescript-eslint/parser@8.48.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.8.3))(@unocss/eslint-plugin@66.5.10(eslint@9.39.1(jiti@2.6.1))(typescript@5.8.3))(@vue/compiler-sfc@3.5.25)(astro-eslint-parser@1.2.2)(eslint-import-resolver-node@0.3.9)(eslint-plugin-astro@1.5.0(eslint@9.39.1(jiti@2.6.1)))(eslint-plugin-format@1.1.0(eslint@9.39.1(jiti@2.6.1)))(eslint-plugin-react-refresh@0.4.24(eslint@9.39.1(jiti@2.6.1)))(eslint-plugin-vuejs-accessibility@2.4.1(eslint@9.39.1(jiti@2.6.1)))(eslint@9.39.1(jiti@2.6.1))(prettier-plugin-astro@0.14.1)(typescript@5.8.3)
@@ -590,6 +593,10 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@finografic/ai-rules@0.2.0':
+    resolution: {integrity: sha512-ZOZhBHcoVdwv4VZGWdAWA5MUHwoDJPEbZUhCH2C8eIEYzQ3ofI8jifO1nlJR6HursQefsgyNU1QSBS6xc45vbw==, tarball: https://npm.pkg.github.com/download/@finografic/ai-rules/0.2.0/11ca9863adb59801194707bb1f81b2ac9e55d8c9}
+    hasBin: true
 
   '@finografic/eslint-config@9.18.4':
     resolution: {integrity: sha512-N1p1g6kZGVmp2DON+D5Q8BUxowBdl6JKeA+TANVl7N/P4TXAjJ9WkUDwIAEQma3BWGWFE26K6aFVgl+XOsR4jg==, tarball: https://npm.pkg.github.com/download/@finografic/eslint-config/9.18.4/76d7f4d7406ce75a186dac0e3a2d66aee23dd73a}
@@ -3894,6 +3901,8 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
+
+  '@finografic/ai-rules@0.2.0': {}
 
   '@finografic/eslint-config@9.18.4(@prettier/plugin-xml@3.4.2(prettier@3.7.4))(@types/node@22.15.17)(@typescript-eslint/parser@8.48.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.8.3))(@unocss/eslint-plugin@66.5.10(eslint@9.39.1(jiti@2.6.1))(typescript@5.8.3))(@vue/compiler-sfc@3.5.25)(astro-eslint-parser@1.2.2)(eslint-import-resolver-node@0.3.9)(eslint-plugin-astro@1.5.0(eslint@9.39.1(jiti@2.6.1)))(eslint-plugin-format@1.1.0(eslint@9.39.1(jiti@2.6.1)))(eslint-plugin-react-refresh@0.4.24(eslint@9.39.1(jiti@2.6.1)))(eslint-plugin-vuejs-accessibility@2.4.1(eslint@9.39.1(jiti@2.6.1)))(eslint@9.39.1(jiti@2.6.1))(prettier-plugin-astro@0.14.1)(typescript@5.8.3)':
     dependencies:
