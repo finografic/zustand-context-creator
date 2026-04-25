@@ -1,6 +1,6 @@
 {
   "name": "@finografic/zustand-context-creator",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "description": "Fingorafic Zustax - Zustand Context Creator",
   "keywords": [
     "context",
