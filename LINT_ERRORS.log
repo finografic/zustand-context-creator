@@ -1,0 +1,538 @@
+
+> @finografic/zustand-context-creator@1.0.2 lint /Users/justin/repos-finografic/@finografic-zustand-context-creator
+> oxlint -c oxlint.config.ts
+
+
+  x typescript-eslint(consistent-type-definitions): Use `interface` instead of `type`.
+   ,-[src/utils/examples/complete-store-example/TodoTypes.ts:8:8]
+ 7 | 
+ 8 | export type TodoItem = {
+   :        ^^^^
+ 9 |   id: string;
+   `----
+  help: Replace `type TodoItem = {
+          id: string;
+          text: string;
+          completed: boolean;
+        };` with `interface TodoItem {
+          id: string;
+          text: string;
+          completed: boolean;
+        }`.
+
+  x typescript-eslint(consistent-type-definitions): Use `interface` instead of `type`.
+    ,-[src/utils/examples/complete-store-example/TodoTypes.ts:14:8]
+ 13 | 
+ 14 | export type TodoValues = {
+    :        ^^^^
+ 15 |   [TodoKeys.items]: TodoItem[];
+    `----
+  help: Replace `type TodoValues = {
+          [TodoKeys.items]: TodoItem[];
+          [TodoKeys.filter]: 'all' | 'active' | 'completed';
+          [TodoKeys.isLoading]: boolean;
+        };` with `interface TodoValues {
+          [TodoKeys.items]: TodoItem[];
+          [TodoKeys.filter]: 'all' | 'active' | 'completed';
+          [TodoKeys.isLoading]: boolean;
+        }`.
+
+  ! oxc(no-accumulating-spread): Do not spread accumulators in Array.prototype.reduce()
+    ,-[src/utils/zustand-setters.tsx:37:37]
+ 36 | }): CreateSettersType<TValues, TPrefix> {
+ 37 |   return Object.keys(defaultValues).reduce(
+    :                                     ^^^|^^
+    :                                        `-- For this reduce
+ 38 |     (acc, key) => ({
+ 39 |       ...acc,
+    :       ^^^|^^
+    :          `-- From this spread
+ 40 |       [`set${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}`]: (val: TValues[typeof key]) =>
+    `----
+  help: It looks like you're spreading an `Object`. Consider using the `Object.assign` or assignment operators to mutate the accumulator instead.
+  note: Using spreads within accumulators leads to `O(n^2)` time complexity.
+
+  x eslint(no-unused-vars): Variable 'addTodo' is declared but never used. Unused variables should start with a '_'.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:30:16]
+ 29 |     isLoading,
+ 30 |     actions: { addTodo, toggleTodo, removeTodo },
+    :                ^^^|^^^
+    :                   `-- 'addTodo' is declared here
+ 31 |   } = TodoContext.useContext();
+    `----
+  help: Consider removing this declaration.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:16:23]
+ 15 | // Usage example:
+ 16 | export const App = () => {
+    :                       ^^
+ 17 |   return (
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:26:28]
+ 25 | // Hook usage in components
+ 26 | export const TodoList = () => {
+    :                            ^^
+ 27 |   const {
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! eslint-plugin-react(jsx-no-constructed-context-values): The Context `value` prop should not be constructed.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:12:32]
+ 11 | export const TodoProvider: React.FC<TodoProviderProps> = ({ children, initialValue }) => {
+ 12 |   return <TodoContext.Provider value={{ initialValue }}>{children}</TodoContext.Provider>;
+    :                                ^^^^^^^^^^^^^^^^^^^^^^^^
+ 13 | };
+    `----
+  help: Wrap the `value` prop in useMemo() or useCallback(), or use a constant value to prevent unnecessary rerenders.
+        Alternatively, move the value outside the render function if it doesn't depend on props or state.
+
+  x eslint-plugin-react(jsx-no-undef): 'TodoFilters' is not defined.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:20:8]
+ 19 |       <TodoList />
+ 20 |       <TodoFilters />
+    :        ^^^^^^^^^^^
+ 21 |     </TodoProvider>
+    `----
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:39:69]
+ 38 |         <li key={item.id}>
+ 39 |           <input type="checkbox" checked={item.completed} onChange={() => toggleTodo(item.id)} />
+    :                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 40 |           <span>{item.text}</span>
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:41:28]
+ 40 |           <span>{item.text}</span>
+ 41 |           <button onClick={() => removeTodo(item.id)}>Delete</button>
+    :                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 42 |         </li>
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-object-as-prop): JSX attribute values should not contain objects created in the same scope.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:12:39]
+ 11 | export const TodoProvider: React.FC<TodoProviderProps> = ({ children, initialValue }) => {
+ 12 |   return <TodoContext.Provider value={{ initialValue }}>{children}</TodoContext.Provider>;
+    :                                       ^^^^^^^^^^^^^^^^
+ 13 | };
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-object-as-prop): JSX attribute values should not contain objects created in the same scope.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:18:33]
+ 17 |   return (
+ 18 |     <TodoProvider initialValue={{ filter: 'active' }}>
+    :                                 ^^^^^^^^^^^^^^^^^^^^
+ 19 |       <TodoList />
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  x eslint(no-unused-vars): Parameter 'state' is declared but never used. Unused parameters should start with a '_'.
+    ,-[src/utils/examples/store-example.ts:29:17]
+ 28 |     // Simple action
+ 29 |     setFilter: (state, newFilter: FilterType) => ({
+    :                 ^^|^^
+    :                   `-- 'state' is declared here
+ 30 |       filter: newFilter,
+    `----
+  help: Consider removing this parameter.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[src/utils/zustand-context.tsx:11:8]
+ 10 |  */
+ 11 | export function createZustandContext<TInitial extends object, TStore extends StoreApi<any>>(
+    :        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 12 |   getStore: (props: { initialValue?: Partial<TInitial> }) => TStore,
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[src/utils/zustand-context.tsx:22:6]
+ 21 |     initialValue?: Partial<TInitial>
+ 22 |   }) => {
+    :      ^^
+ 23 |     const [store] = React.useState(() => getStore({ initialValue }));
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[src/utils/zustand-extensions.ts:61:13]
+ 60 |           if (!isBatching)
+ 61 |             return;
+    :             ^^^^^^^
+ 62 | 
+    `----
+  help: Replace `return;` with `{return;}`.
+
+  ! typescript-eslint(array-type): Array type using 'T[]' is forbidden for non-simple types. Use 'Array<T>' instead.
+   ,-[src/utils/zustand-extensions.ts:4:90]
+ 3 | // Reset capability
+ 4 | export function withReset<T extends object>(initialState: T, config = { blacklist: [] as (keyof T)[] }) {
+   :                                                                                          ^^^^^^^^^^^
+ 5 |   return (set: StoreApi<T>['setState']) => ({
+   `----
+  help: Replace `(keyof T)[]` with `Array<keyof T>`.
+
+  ! typescript-eslint(array-type): Array type using 'T[]' is forbidden for non-simple types. Use 'Array<T>' instead.
+    ,-[src/utils/zustand-extensions.ts:20:20]
+ 19 | export function createPersist<T extends object>(key: string, options = {
+ 20 |   whitelist: [] as (keyof T)[],
+    :                    ^^^^^^^^^^^
+ 21 |   blacklist: [] as (keyof T)[],
+    `----
+  help: Replace `(keyof T)[]` with `Array<keyof T>`.
+
+  ! typescript-eslint(array-type): Array type using 'T[]' is forbidden for non-simple types. Use 'Array<T>' instead.
+    ,-[src/utils/zustand-extensions.ts:21:20]
+ 20 |   whitelist: [] as (keyof T)[],
+ 21 |   blacklist: [] as (keyof T)[],
+    :                    ^^^^^^^^^^^
+ 22 | }) {
+    `----
+  help: Replace `(keyof T)[]` with `Array<keyof T>`.
+
+  ! oxc(no-accumulating-spread): Do not spread accumulators in Array.prototype.reduce()
+    ,-[src/utils/zustand-extensions.ts:64:39]
+ 63 |           const state = get();
+ 64 |           const newState = batchQueue.reduce((acc, action) => ({ ...acc, ...action() }), state);
+    :                                       ^^^|^^                     ^^^|^^
+    :                                          |                          `-- From this spread
+    :                                          `-- For this reduce
+ 65 | 
+    `----
+  help: Consider using `Object.assign()` or `Array.prototype.push()` to mutate the accumulator instead.
+  note: Using spreads within accumulators leads to `O(n^2)` time complexity.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[src/utils/zustand-core.ts:33:5]
+ 32 |   if (!isDev)
+ 33 |     return null;
+    :     ^^^^^^^^^^^^
+ 34 | 
+    `----
+  help: Replace `return null;` with `{return null;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[src/utils/zustand-core.ts:46:9]
+ 45 |       if (payload)
+ 46 |         console.log('Payload:', payload);
+    :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 47 |       console.groupEnd();
+    `----
+  help: Replace `console.log('Payload:', payload);` with `{console.log('Payload:', payload);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[src/utils/zustand-core.ts:55:5]
+ 54 |   if (typeof prev !== 'object' || typeof next !== 'object')
+ 55 |     return { prev, next };
+    :     ^^^^^^^^^^^^^^^^^^^^^^
+ 56 |   return Object.entries(next as object).reduce(
+    `----
+  help: Replace `return { prev, next };` with `{return { prev, next };}`.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+   ,-[src/utils/zustand-core.ts:5:8]
+ 4 | // Enhanced type validation
+ 5 | export function validateInitialState<T extends Record<string, any>>(initialState: Partial<T>, enumKeys: Record<string, string>, displayName: string) {
+   :        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 6 |   if (isDev) {
+   `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[src/utils/zustand-core.ts:31:8]
+ 30 | // Development logging utility
+ 31 | export function createDevLogger(storeName: string) {
+    :        ^^^^^^^^^^^^^^^^^^^^^^^^
+ 32 |   if (!isDev)
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[src/utils/zustand-core.ts:53:1]
+ 52 | // Utility to get state differences
+ 53 | function getDiff(prev: unknown, next: unknown) {
+    : ^^^^^^^^^^^^^^^^
+ 54 |   if (typeof prev !== 'object' || typeof next !== 'object')
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[tests/integration.test.tsx:71:32]
+ 70 |     it('should work with full integration pattern', () => {
+ 71 |       const TestComponent = () => {
+    :                                ^^
+ 72 |         const { theme, language, setAppConfigTheme, setAppConfigLanguage, toggleTheme } = useAppConfig();
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+     ,-[tests/integration.test.tsx:129:32]
+ 128 |     it('should work with initialValue', () => {
+ 129 |       const TestComponent = () => {
+     :                                ^^
+ 130 |         const { theme, language } = useAppConfig();
+     `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+     ,-[tests/integration.test.tsx:151:32]
+ 150 |     it('should throw error when used outside Provider', () => {
+ 151 |       const TestComponent = () => {
+     :                                ^^
+ 152 |         try {
+     `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+     ,-[tests/integration.test.tsx:252:32]
+ 251 |     it('should handle complex todo operations', () => {
+ 252 |       const TestComponent = () => {
+     :                                ^^
+ 253 |         const { items, filter, setFilter, addTodo, clearCompleted } = useTodos();
+     `----
+  help: Require explicit return types on functions and class methods.
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+    ,-[tests/integration.test.tsx:80:24]
+ 79 |               data-testid="set-dark"
+ 80 |               onClick={() => setAppConfigTheme('dark')}
+    :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 81 |             >
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+    ,-[tests/integration.test.tsx:86:24]
+ 85 |               data-testid="set-language"
+ 86 |               onClick={() => setAppConfigLanguage('es')}
+    :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 87 |             >
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+     ,-[tests/integration.test.tsx:264:24]
+ 263 |               data-testid="add"
+ 264 |               onClick={() => addTodo('Test Todo')}
+     :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 265 |             >
+     `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+     ,-[tests/integration.test.tsx:270:24]
+ 269 |               data-testid="set-filter"
+ 270 |               onClick={() => setFilter('active')}
+     :                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 271 |             >
+     `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-object-as-prop): JSX attribute values should not contain objects created in the same scope.
+     ,-[tests/integration.test.tsx:141:50]
+ 140 |       render(
+ 141 |         <AppConfigContext.Provider initialValue={{ theme: 'dark', language: 'fr' }}>
+     :                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 142 |           <TestComponent />
+     `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[tests/createZustandContext.test.tsx:49:11]
+ 48 |         if (!store)
+ 49 |           return <div>No store</div>;
+    :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 50 |         return <div>{store.getState().name}</div>;
+    `----
+  help: Replace `return <div>No store</div>;` with `{return <div>No store</div>;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[tests/createZustandContext.test.tsx:78:11]
+ 77 |         if (!store)
+ 78 |           return <div>No store</div>;
+    :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 79 |         return <div>{store.getState().count}</div>;
+    `----
+  help: Replace `return <div>No store</div>;` with `{return <div>No store</div>;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[tests/createZustandContext.test.tsx:137:13]
+ 136 |           if (!store)
+ 137 |             return;
+     :             ^^^^^^^
+ 138 |           setCount(store.getState().count);
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[tests/createZustandContext.test.tsx:146:11]
+ 145 |         if (!store)
+ 146 |           return <div>No store</div>;
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 147 | 
+     `----
+  help: Replace `return <div>No store</div>;` with `{return <div>No store</div>;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[tests/createZustandContext.test.tsx:194:11]
+ 193 |         if (!store)
+ 194 |           return <div>No store</div>;
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 195 |         return <div data-testid="id">{store.getState().id}</div>;
+     `----
+  help: Replace `return <div>No store</div>;` with `{return <div>No store</div>;}`.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[tests/createZustandContext.test.tsx:46:32]
+ 45 | 
+ 46 |       const TestComponent = () => {
+    :                                ^^
+ 47 |         const store = TestContext.useContext();
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+    ,-[tests/createZustandContext.test.tsx:75:32]
+ 74 | 
+ 75 |       const TestComponent = () => {
+    :                                ^^
+ 76 |         const store = TestContext.useContext();
+    `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+     ,-[tests/createZustandContext.test.tsx:104:32]
+ 103 | 
+ 104 |       const TestComponent = () => {
+     :                                ^^
+ 105 |         const store = TestContext.useContext();
+     `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+     ,-[tests/createZustandContext.test.tsx:131:32]
+ 130 | 
+ 131 |       const TestComponent = () => {
+     :                                ^^
+ 132 |         const store = TestContext.useContext();
+     `----
+  help: Require explicit return types on functions and class methods.
+
+  ! typescript-eslint(explicit-function-return-type): Missing return type on function.
+     ,-[tests/createZustandContext.test.tsx:191:32]
+ 190 | 
+ 191 |       const TestComponent = () => {
+     :                                ^^
+ 192 |         const store = TestContext.useContext();
+     `----
+  help: Require explicit return types on functions and class methods.
+
+  ! eslint-plugin-react-perf(jsx-no-new-function-as-prop): JSX attribute values should not contain functions created in the same scope.
+     ,-[tests/createZustandContext.test.tsx:153:24]
+ 152 |               data-testid="increment"
+ 153 |               onClick={() => store.getState().increment()}
+     :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 154 |             >
+     `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-object-as-prop): JSX attribute values should not contain objects created in the same scope.
+    ,-[tests/createZustandContext.test.tsx:83:45]
+ 82 |       render(
+ 83 |         <TestContext.Provider initialValue={{ count: 42 }}>
+    :                                             ^^^^^^^^^^^^^
+ 84 |           <TestComponent />
+    `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-object-as-prop): JSX attribute values should not contain objects created in the same scope.
+     ,-[tests/createZustandContext.test.tsx:199:45]
+ 198 |       const { rerender } = render(
+ 199 |         <TestContext.Provider initialValue={{ id: 'first' }}>
+     :                                             ^^^^^^^^^^^^^^^
+ 200 |           <TestComponent />
+     `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! eslint-plugin-react-perf(jsx-no-new-object-as-prop): JSX attribute values should not contain objects created in the same scope.
+     ,-[tests/createZustandContext.test.tsx:207:45]
+ 206 |       rerender(
+ 207 |         <TestContext.Provider initialValue={{ id: 'second' }}>
+     :                                             ^^^^^^^^^^^^^^^^
+ 208 |           <TestComponent />
+     `----
+  help: simplify props or memoize props in the parent component (https://react.dev/reference/react/memo#my-component-rerenders-when-a-prop-is-an-object-or-array).
+
+  ! typescript-eslint(ban-ts-comment): Do not use @ts-nocheck because it alters compilation errors.
+   ,-[src/utils/examples/complete-store-example/TodoContext.ts:2:3]
+ 1 | import type { TodoStore, TodoValues } from './TodoTypes';
+ 2 | // @ts-nocheck - Example file: This is a reference implementation
+   :   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 3 | // The actual implementation would be in the main package exports
+   `----
+  help: Remove the @ts-nocheck directive and fix the underlying TypeScript error instead. If you must suppress an error, consider using @ts-expect-error with a descriptive comment explaining why it's necessary.
+
+  ! oxc(no-map-spread): Spreading to modify object properties in `map` calls is inefficient
+    ,-[src/utils/examples/complete-store-example/TodoContext.ts:43:35]
+ 42 |             set({
+ 43 |               items: currentItems.map(item =>
+    :                                   ^|^
+    :                                    `-- This map call spreads an object
+ 44 |                 item.id === id ? { ...item, completed: !item.completed } : item,
+    :                                    ^^^|^^^
+    :                                       `-- This spread allocates a new value on each iteration
+ 45 |               ),
+    `----
+  help: If in-place mutation is acceptable, use `Object.assign` or direct property assignment instead of spreading
+  note: `Object.assign` mutates the first argument. Disable this rule if copy-on-write behavior is required.
+
+  x typescript(TS2304): Cannot find name 'TodoFilters'.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:20:8]
+ 19 |       <TodoList />
+ 20 |       <TodoFilters />
+    :        ^^^^^^^^^^^
+ 21 |     </TodoProvider>
+    `----
+
+  x typescript(TS7006): Parameter 'item' implicitly has an 'any' type.
+    ,-[src/utils/examples/complete-store-example/TodoProvider.tsx:37:19]
+ 36 |     <ul>
+ 37 |       {items.map((item) => (
+    :                   ^^^^
+ 38 |         <li key={item.id}>
+    `----
+
+  x typescript(TS2307): Cannot find module '../../zustand' or its corresponding type declarations.
+    ,-[src/utils/examples/complete-store-example/TodoContext.ts:9:53]
+  8 | // In actual usage, import from '@finografic/zustand-context-creator'
+  9 | import { createSetters, createZustandContext } from '../../zustand';
+    :                                                     ^^^^^^^^^^^^^^^
+ 10 | import { TodoKeys } from './TodoTypes';
+    `----
+
+  x typescript(TS7031): Binding element 'initialValue' implicitly has an 'any' type.
+    ,-[src/utils/examples/complete-store-example/TodoContext.ts:21:52]
+ 20 | 
+ 21 | export const TodoContext = createZustandContext(({ initialValue }) => {
+    :                                                    ^^^^^^^^^^^^
+ 22 |   return createStore<TodoStore>()(
+    `----
+
+  x Unused eslint-disable directive (no problems were reported).
+   ,-[src/utils/zustand-core.ts:1:1]
+ 1 | /* eslint-disable no-console */
+   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 2 | const isDev = process.env.NODE_ENV === 'development';
+   `----
+
+Found 37 warnings and 19 errors.
+Finished in 395ms on 19 files with 193 rules using 10 threads.
+ ELIFECYCLE  Command failed with exit code 1.

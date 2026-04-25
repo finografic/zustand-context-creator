@@ -1,12 +1,12 @@
 import type { TodoStore, TodoValues } from './TodoTypes';
-// @ts-nocheck - Example file: This is a reference implementation
 // The actual implementation would be in the main package exports
 // TodoContext.ts
 import { createStore } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import type { StoreApi } from 'zustand';
 // Note: This import path is for example purposes only
 // In actual usage, import from '@finografic/zustand-context-creator'
-import { createSetters, createZustandContext } from '../../zustand';
+import { createSetters, createZustandContext } from '../../../index';
 import { TodoKeys } from './TodoTypes';
 
 export const DISPLAY_NAME = 'Todo';
@@ -18,7 +18,7 @@ export const defaultValue: TodoValues = {
   [TodoKeys.isLoading]: false,
 };
 
-export const TodoContext = createZustandContext(({ initialValue }) => {
+export const TodoContext = createZustandContext<TodoValues, StoreApi<TodoStore>>(({ initialValue }) => {
   return createStore<TodoStore>()(
     subscribeWithSelector(
       (set, get): TodoStore => ({
@@ -40,7 +40,7 @@ export const TodoContext = createZustandContext(({ initialValue }) => {
           toggleTodo: (id) => {
             const currentItems = get().items;
             set({
-              items: currentItems.map(item =>
+              items: currentItems.map((item) =>
                 item.id === id ? { ...item, completed: !item.completed } : item,
               ),
             });
@@ -49,7 +49,7 @@ export const TodoContext = createZustandContext(({ initialValue }) => {
           removeTodo: (id) => {
             const currentItems = get().items;
             set({
-              items: currentItems.filter(item => item.id !== id),
+              items: currentItems.filter((item) => item.id !== id),
             });
           },
         },

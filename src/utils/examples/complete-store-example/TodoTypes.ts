@@ -5,17 +5,17 @@ export enum TodoKeys {
   isLoading = 'isLoading',
 }
 
-export type TodoItem = {
+export interface TodoItem {
   id: string;
   text: string;
   completed: boolean;
-};
+}
 
-export type TodoValues = {
+export interface TodoValues {
   [TodoKeys.items]: TodoItem[];
   [TodoKeys.filter]: 'all' | 'active' | 'completed';
   [TodoKeys.isLoading]: boolean;
-};
+}
 
 // Define the store type including actions
 export type TodoStore = TodoValues & {

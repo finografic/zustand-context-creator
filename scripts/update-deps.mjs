@@ -4,8 +4,7 @@
  *
  * Packages without a caret (^) are considered pinned and will be skipped.
  *
- * Usage:
- *   node scripts/update-deps.mjs
+ * Usage: node scripts/update-deps.mjs
  */
 
 import { execSync } from 'node:child_process';
@@ -55,7 +54,7 @@ const allPackages = [
   ...Object.keys(packageJson.dependencies || {}),
 ];
 
-const packagesToUpdate = allPackages.filter(pkg => !excludePackages.includes(pkg));
+const packagesToUpdate = allPackages.filter((pkg) => !excludePackages.includes(pkg));
 
 if (packagesToUpdate.length === 0) {
   console.log('✅ No packages to update (all are pinned)');
@@ -73,8 +72,7 @@ for (const pkg of packagesToUpdate) {
     console.log(`   Updating ${pkg}...`);
     execSync(`pnpm update --latest ${pkg}`, { stdio: 'inherit' });
     updated++;
-  }
-  catch (_error) {
+  } catch (_error) {
     console.error(`   ❌ Failed to update ${pkg}`);
     failed++;
   }

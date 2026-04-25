@@ -1,7 +1,9 @@
 // TodoProvider.tsx
 import React from 'react';
+import { useStore } from 'zustand';
+import type { TodoStore, TodoValues } from './TodoTypes';
+
 import { TodoContext } from './TodoContext';
-import type { TodoValues } from './TodoTypes';
 
 interface TodoProviderProps {
   children: React.ReactNode;
@@ -9,26 +11,31 @@ interface TodoProviderProps {
 }
 
 export const TodoProvider: React.FC<TodoProviderProps> = ({ children, initialValue }) => {
-  return <TodoContext.Provider value={{ initialValue }}>{children}</TodoContext.Provider>;
+  return <TodoContext.Provider initialValue={initialValue}>{children}</TodoContext.Provider>;
 };
 
 // Usage example:
-export const App = () => {
+const APP_INITIAL_VALUE: Partial<TodoValues> = { filter: 'active' };
+
+export const App = (): React.JSX.Element => {
   return (
-    <TodoProvider initialValue={{ filter: 'active' }}>
+    <TodoProvider initialValue={APP_INITIAL_VALUE}>
       <TodoList />
-      <TodoFilters />
     </TodoProvider>
   );
 };
 
 // Hook usage in components
-export const TodoList = () => {
+export const TodoList = (): React.JSX.Element => {
+  const store = TodoContext.useContext();
+  if (!store) {
+    return <div>Missing Todo store context</div>;
+  }
   const {
     items,
     isLoading,
-    actions: { addTodo, toggleTodo, removeTodo },
-  } = TodoContext.useContext();
+    actions: { toggleTodo, removeTodo },
+  } = useStore(store, (state: TodoStore) => state);
 
   if (isLoading) return <div>Loading...</div>;
 

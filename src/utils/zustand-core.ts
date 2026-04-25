@@ -1,10 +1,13 @@
-/* eslint-disable no-console */
 const isDev = process.env.NODE_ENV === 'development';
 
 // Enhanced type validation
-export function validateInitialState<T extends Record<string, any>>(initialState: Partial<T>, enumKeys: Record<string, string>, displayName: string) {
+export function validateInitialState<T extends Record<string, any>>(
+  initialState: Partial<T>,
+  enumKeys: Record<string, string>,
+  displayName: string,
+): void {
   if (isDev) {
-    const invalidKeys = Object.keys(initialState).filter(key => !Object.values(enumKeys).includes(key));
+    const invalidKeys = Object.keys(initialState).filter((key) => !Object.values(enumKeys).includes(key));
     if (invalidKeys.length > 0) {
       throw new Error(
         `Invalid keys found in ${displayName} initial state: ${invalidKeys.join(
@@ -16,7 +19,10 @@ export function validateInitialState<T extends Record<string, any>>(initialState
 }
 
 // Enhanced selector creation with memoization support
-export function createSelector<T extends object, U>(selector: (state: T) => U, equalityFn: (a: U, b: U) => boolean = Object.is) {
+export function createSelector<T extends object, U>(
+  selector: (state: T) => U,
+  equalityFn: (a: U, b: U) => boolean = Object.is,
+) {
   let previousResult: U | undefined;
   return (state: T): U => {
     const result = selector(state);
@@ -28,9 +34,13 @@ export function createSelector<T extends object, U>(selector: (state: T) => U, e
 }
 
 // Development logging utility
-export function createDevLogger(storeName: string) {
-  if (!isDev)
+export function createDevLogger(storeName: string): {
+  logStateChange: (prevState: unknown, nextState: unknown) => void;
+  logAction: (actionName: string, payload?: unknown) => void;
+} | null {
+  if (!isDev) {
     return null;
+  }
 
   return {
     logStateChange: (prevState: unknown, nextState: unknown) => {
@@ -42,17 +52,22 @@ export function createDevLogger(storeName: string) {
     },
     logAction: (actionName: string, payload?: unknown) => {
       console.group(`${storeName} Action: ${actionName}`);
-      if (payload)
+      if (payload) {
         console.log('Payload:', payload);
+      }
       console.groupEnd();
     },
   };
 }
 
 // Utility to get state differences
-function getDiff(prev: unknown, next: unknown) {
-  if (typeof prev !== 'object' || typeof next !== 'object')
+function getDiff(
+  prev: unknown,
+  next: unknown,
+): Record<string, { prev: unknown; next: unknown }> | { prev: unknown; next: unknown } {
+  if (typeof prev !== 'object' || typeof next !== 'object') {
     return { prev, next };
+  }
   return Object.entries(next as object).reduce(
     (acc, [key, value]) => {
       if ((prev as any)[key] !== value) {
@@ -60,6 +75,6 @@ function getDiff(prev: unknown, next: unknown) {
       }
       return acc;
     },
-    {} as Record<string, { prev: unknown, next: unknown }>,
+    {} as Record<string, { prev: unknown; next: unknown }>,
   );
 }

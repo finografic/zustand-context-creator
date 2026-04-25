@@ -4,9 +4,9 @@ import { createStore } from '@finografic/zustand-context-creator';
 
 // Define your types
 interface TodoItem {
-  id: string
-  text: string
-  completed: boolean
+  id: string;
+  text: string;
+  completed: boolean;
 }
 
 type FilterType = 'all' | 'active' | 'completed';
@@ -26,7 +26,7 @@ const todoStore = createStore({
   // Actions are automatically typed based on state
   actions: {
     // Simple action
-    setFilter: (state, newFilter: FilterType) => ({
+    setFilter: (_state, newFilter: FilterType) => ({
       filter: newFilter,
     }),
 
@@ -37,17 +37,16 @@ const todoStore = createStore({
 
     // Action with computed state
     toggleTodo: (state, id: string) => ({
-      items: state.items.map(item => (item.id === id ? { ...item, completed: !item.completed } : item)),
+      items: state.items.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)),
     }),
 
     // Async action example
     async fetchTodos(state) {
       state.setIsLoading(true);
       try {
-        const todos = await fetch('/api/todos').then(r => r.json());
+        const todos = await fetch('/api/todos').then((r) => r.json());
         return { items: todos, isLoading: false };
-      }
-      catch (_error) {
+      } catch (_error) {
         return { isLoading: false };
       }
     },

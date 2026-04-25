@@ -1,14 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createStore } from 'zustand';
+
 import { createSetters } from '../src/utils/zustand-setters';
 
 describe('createSetters', () => {
   describe('basic functionality', () => {
     it('should create setters for all properties in defaultValue', () => {
       interface TestValues {
-        name: string
-        age: number
-        active: boolean
+        name: string;
+        age: number;
+        active: boolean;
       }
 
       const defaultValue: TestValues = {
@@ -34,8 +35,8 @@ describe('createSetters', () => {
 
     it('should call set with correct state updates', () => {
       interface TestValues {
-        name: string
-        count: number
+        name: string;
+        count: number;
       }
 
       const defaultValue: TestValues = {
@@ -52,22 +53,16 @@ describe('createSetters', () => {
       });
 
       setters.setName('Updated');
-      expect(setSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'Updated' }),
-        undefined,
-      );
+      expect(setSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'Updated' }), undefined);
 
       setters.setCount(42);
-      expect(setSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ count: 42 }),
-        undefined,
-      );
+      expect(setSpy).toHaveBeenCalledWith(expect.objectContaining({ count: 42 }), undefined);
     });
 
     it('should preserve other state properties when updating', () => {
       interface TestValues {
-        name: string
-        age: number
+        name: string;
+        age: number;
       }
 
       const defaultValue: TestValues = {
@@ -85,25 +80,15 @@ describe('createSetters', () => {
 
       setters.setName('Jane');
 
-      expect(setSpy).toHaveBeenCalledWith(
-        expect.any(Function),
-        undefined,
-      );
-
-      // Call the function to verify it preserves state
-      const updateFn = setSpy.mock.calls[0][0] as (state: TestValues) => Partial<TestValues>;
-      const currentState = { name: 'John', age: 30 };
-      const result = updateFn(currentState);
-
-      expect(result).toEqual({ name: 'Jane' });
+      expect(setSpy).toHaveBeenCalledWith(expect.objectContaining({ name: 'Jane' }), undefined);
     });
   });
 
   describe('with prefix', () => {
     it('should create setters with prefix', () => {
       interface TestValues {
-        theme: string
-        language: string
+        theme: string;
+        language: string;
       }
 
       const defaultValue: TestValues = {
@@ -127,7 +112,7 @@ describe('createSetters', () => {
 
     it('should work with empty prefix', () => {
       interface TestValues {
-        value: string
+        value: string;
       }
 
       const defaultValue: TestValues = {
@@ -149,8 +134,8 @@ describe('createSetters', () => {
   describe('capitalization', () => {
     it('should capitalize first letter of property name', () => {
       interface TestValues {
-        userName: string
-        userEmail: string
+        userName: string;
+        userEmail: string;
       }
 
       const defaultValue: TestValues = {
@@ -171,8 +156,8 @@ describe('createSetters', () => {
 
     it('should handle single character property names', () => {
       interface TestValues {
-        x: number
-        y: number
+        x: number;
+        y: number;
       }
 
       const defaultValue: TestValues = {
@@ -195,9 +180,9 @@ describe('createSetters', () => {
   describe('type safety', () => {
     it('should maintain type safety for setter parameters', () => {
       interface TestValues {
-        count: number
-        name: string
-        active: boolean
+        count: number;
+        name: string;
+        active: boolean;
       }
 
       const defaultValue: TestValues = {
@@ -237,9 +222,9 @@ describe('createSetters', () => {
     it('should handle nested object values', () => {
       interface NestedValue {
         user: {
-          name: string
-          age: number
-        }
+          name: string;
+          age: number;
+        };
       }
 
       const defaultValue: NestedValue = {
@@ -267,7 +252,7 @@ describe('createSetters', () => {
 
     it('should handle array values', () => {
       interface ArrayValue {
-        items: string[]
+        items: string[];
       }
 
       const defaultValue: ArrayValue = {

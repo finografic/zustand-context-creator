@@ -39,18 +39,17 @@
     "build": "tsup --format esm,cjs --clean --dts",
     "·········· LINTING": "···················································",
     "lint": "oxlint -c oxlint.config.ts",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "oxlint -c oxlint.config.ts --fix",
     "lint:ci": "oxlint -c oxlint.config.ts --quiet",
     "·········· FORMATTING": "··················································",
     "format:check": "oxfmt --check",
     "format:fix": "oxfmt",
-    "·········· PUBLISH:GITHUB": "·····················································",
-    "prepublish:github": "pnpm build && git add dist/** && git commit -m \"chore: update generated files\" || true",
-    "publish:github:gh:patch": "pnpm prepublish:github && dotenvx run -- pnpm version patch && pnpm publish --registry https://npm.pkg.github.com && pnpm run publish:github:gh:post",
-    "publish:github:gh:minor": "pnpm prepublish:github && dotenvx run -- pnpm version minor && pnpm publish --registry https://npm.pkg.github.com && pnpm run publish:github:gh:post",
-    "publish:github:gh:major": "pnpm prepublish:github && dotenvx run -- pnpm version major && pnpm publish --registry https://npm.pkg.github.com && pnpm run publish:github:gh:post",
-    "publish:github:gh": "pnpm publish --registry https://npm.pkg.github.com && pnpm run publish:github:gh:post",
-    "publish:github:gh:post": "git push origin --tags && gh release create \"$(git describe --tags --abbrev=0)\" --title \"$(git describe --tags --abbrev=0)\" --notes \"Release $(git describe --tags --abbrev=0)\"",
+    "·········· PUBLISH:GITHUB": "············································",
+    "release:github:patch": "pnpm run release:check && pnpm version patch && git push --follow-tags",
+    "release:github:minor": "pnpm run release:check && pnpm version minor && git push --follow-tags",
+    "release:github:major": "pnpm run release:check && pnpm version major && git push --follow-tags",
+    "release:check": "pnpm format:check && pnpm lint:fix && pnpm typecheck && pnpm test:run",
+    "release:publish": "pnpm publish --registry https://npm.pkg.github.com",
     "·········· REGISTRIES": "··············································",
     "view:registry:gitub": "dotenvx run -- pnpm view @finografic/zustand-context-creator --registry=https://npm.pkg.github.com",
     "·········· UPDATE:DEPS": "·····················································",
@@ -85,6 +84,7 @@
     "@vitest/ui": "^2.1.8",
     "happy-dom": "^15.11.7",
     "husky": "latest",
+    "jiti": "^2.6.1",
     "jsdom": "^25.0.1",
     "lint-staged": "^16.2.7",
     "oxfmt": "^0.46.0",
@@ -99,6 +99,7 @@
     "react": "^19.0.0",
     "zustand": "^4.0.0 || ^5.0.0"
   },
+  "packageManager": "pnpm@10.32.1",
   "lint-staged": {
     "*.{ts,tsx,js,jsx,mjs,cjs}": [
       "oxfmt --no-error-on-unmatched-pattern",
@@ -111,6 +112,5 @@
     "*.{json,jsonc,yml,yaml,toml}": [
       "oxfmt --no-error-on-unmatched-pattern"
     ]
-  },
-  "packageManager": "pnpm@10.0.0"
+  }
 }

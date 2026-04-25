@@ -7,9 +7,8 @@
     "source.fixAll.oxc": "explicit",
     "source.organizeImports": "explicit"
   },
-  "eslint.enable": false,
-  "eslint.validate": ["javascript", "typescript"],
-  "prettier.enable": false,
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
+
   "oxc.typeAware": true,
   "oxc.lint.run": "onSave",
   "typescript.tsdk": "node_modules/typescript/lib",

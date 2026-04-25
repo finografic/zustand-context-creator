@@ -18,10 +18,27 @@
 /dist
 /bin
 
-# misc
-.DS_Store
-Icon*
-*.pem
+# Agents
+.agents/
+!.agents/handoff.md
+.codex/
+.claude/
+!.claude/handoff.md
+!.claude/settings.json
+.worktrees/
+**/worktrees/
+
+# IDE
+**/.cursor/**
+!**/.cursor/.gitkeep
+!.cursor/rules/
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Docs
+docs/drafts/
 
 # turbo
 .turbo
@@ -64,7 +81,3 @@ docs/typedoc/
 !docs/**/*.md
 !docs/index.md
 
-
-# Agents
-.agents/
-!.agents/handoff.md

@@ -1,7 +1,8 @@
-type SetState<T> = (partial: Partial<T> | ((state: T) => Partial<T>), replace?: boolean) => void;
+import type { StoreApi } from 'zustand';
 
 /**
  * Utility type that generates setter function types based on a values object type
+ *
  * @template TValues - The values object type
  * @template TPrefix - The prefix to use for setter names (defaults to empty string)
  * @returns Object type with setter functions for each property in TValues
@@ -12,6 +13,7 @@ export type CreateSettersType<TValues extends Record<string, any>, TPrefix exten
 
 /**
  * Creates typed setter functions for Zustand store properties
+ *
  * @template TStore - The store type
  * @template TValues - The values object type
  * @template TPrefix - The prefix for setter names
@@ -30,16 +32,15 @@ export function createSetters<
   prefix = '' as TPrefix,
   defaultValue: defaultValues,
 }: {
-  defaultValue: TValues
-  set: SetState<TStore>
-  prefix?: TPrefix
+  defaultValue: TValues;
+  set: StoreApi<TStore>['setState'];
+  prefix?: TPrefix;
 }): CreateSettersType<TValues, TPrefix> {
-  return Object.keys(defaultValues).reduce(
-    (acc, key) => ({
-      ...acc,
-      [`set${prefix}${key.charAt(0).toUpperCase() + key.slice(1)}`]: (val: TValues[typeof key]) =>
-        set(state => ({ ...state, [key]: val })),
-    }),
-    {},
-  ) as CreateSettersType<TValues, TPrefix>;
+  const setters: Record<string, (val: TValues[keyof TValues]) => void> = {};
+  for (const key of Object.keys(defaultValues) as Array<keyof TValues>) {
+    const setterName = `set${prefix}${String(key).charAt(0).toUpperCase() + String(key).slice(1)}`;
+    setters[setterName] = (val: TValues[typeof key]) =>
+      set({ [key]: val } as unknown as Partial<TStore>, undefined);
+  }
+  return setters as unknown as CreateSettersType<TValues, TPrefix>;
 }

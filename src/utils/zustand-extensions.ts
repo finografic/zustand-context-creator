@@ -1,7 +1,7 @@
 import type { StoreApi } from 'zustand';
 
 // Reset capability
-export function withReset<T extends object>(initialState: T, config = { blacklist: [] as (keyof T)[] }) {
+export function withReset<T extends object>(initialState: T, config = { blacklist: [] as Array<keyof T> }) {
   return (set: StoreApi<T>['setState']) => ({
     reset: () => {
       const resetState = Object.entries(initialState).reduce((acc, [key, value]) => {
@@ -16,18 +16,21 @@ export function withReset<T extends object>(initialState: T, config = { blacklis
 }
 
 // Persistence middleware creator
-export function createPersist<T extends object>(key: string, options = {
-  whitelist: [] as (keyof T)[],
-  blacklist: [] as (keyof T)[],
-}) {
+export function createPersist<T extends object>(
+  key: string,
+  options = {
+    whitelist: [] as Array<keyof T>,
+    blacklist: [] as Array<keyof T>,
+  },
+) {
   return (set: StoreApi<T>['setState'], get: StoreApi<T>['getState']) => ({
     persist: {
       save: () => {
         const state = get();
         const persistedState = Object.entries(state).reduce((acc, [key, value]) => {
           if (
-            (options.whitelist.length === 0 || options.whitelist.includes(key as keyof T))
-            && !options.blacklist.includes(key as keyof T)
+            (options.whitelist.length === 0 || options.whitelist.includes(key as keyof T)) &&
+            !options.blacklist.includes(key as keyof T)
           ) {
             (acc as Record<string, unknown>)[key] = value;
           }
@@ -57,11 +60,15 @@ export function createBatchActions<T extends object>() {
           isBatching = true;
         },
         commit: () => {
-          if (!isBatching)
+          if (!isBatching) {
             return;
+          }
 
           const state = get();
-          const newState = batchQueue.reduce((acc, action) => ({ ...acc, ...action() }), state);
+          const newState = { ...state };
+          for (const action of batchQueue) {
+            Object.assign(newState, action());
+          }
 
           set(newState);
           batchQueue = [];
@@ -70,8 +77,7 @@ export function createBatchActions<T extends object>() {
         addAction: (action: () => Partial<T>) => {
           if (isBatching) {
             batchQueue.push(action);
-          }
-          else {
+          } else {
             set(action());
           }
         },

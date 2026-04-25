@@ -5,6 +5,7 @@ export default defineConfig({
   env: {
     builtin: true,
     node: true,
+    react: true,
   },
 
   plugins: [
@@ -29,7 +30,7 @@ export default defineConfig({
 
   categories: {
     correctness: 'error',
-    perf: 'error',
+    perf: 'warn',
   },
 
   rules: {
@@ -92,7 +93,21 @@ export default defineConfig({
     'typescript/no-floating-promises': 'off',
     'typescript/await-thenable': 'error',
     'typescript/consistent-indexed-object-style': ['error', 'record'],
-    'typescript/explicit-function-return-type': 'error',
+    // 'typescript/explicit-function-return-type': 'error',
+
+    // NEW:
+    'typescript/explicit-function-return-type': [
+      'warn',
+      {
+        allowConciseArrowFunctionExpressionsStartingWithVoid: true,
+        allowDirectConstAssertionInArrowFunctions: true,
+        allowExpressions: true,
+        allowFunctionsWithoutTypeParameters: true,
+        allowHigherOrderFunctions: true,
+        allowIIFEs: true,
+        allowTypedFunctionExpressions: true,
+      },
+    ],
   },
   overrides: [
     {

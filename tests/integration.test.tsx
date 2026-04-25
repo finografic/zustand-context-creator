@@ -1,25 +1,26 @@
-import type { StoreApi } from 'zustand';
 import { act, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { createStore, useStore } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
+import type { StoreApi } from 'zustand';
+
 import { createZustandContext } from '../src/utils/zustand-context';
 import { createSetters } from '../src/utils/zustand-setters';
 
 describe('integration Tests', () => {
   describe('createZustandContext + createSetters', () => {
     interface AppConfigValues {
-      theme: 'light' | 'dark'
-      language: string
+      theme: 'light' | 'dark';
+      language: string;
     }
 
     type AppConfigStore = AppConfigValues & {
       actions: {
-        setAppConfigTheme: (theme: 'light' | 'dark') => void
-        setAppConfigLanguage: (language: string) => void
-        toggleTheme: () => void
-      }
+        setAppConfigTheme: (theme: 'light' | 'dark') => void;
+        setAppConfigLanguage: (language: string) => void;
+        toggleTheme: () => void;
+      };
     };
 
     const defaultValue: AppConfigValues = {
@@ -39,7 +40,7 @@ describe('integration Tests', () => {
               actions: {
                 ...createSetters({ set: set as any, defaultValue, prefix: SETTER_PREFIX }),
                 toggleTheme: () => {
-                  set(state => ({
+                  set((state) => ({
                     theme: state.theme === 'light' ? 'dark' : 'light',
                   }));
                 },
@@ -68,29 +69,20 @@ describe('integration Tests', () => {
     };
 
     it('should work with full integration pattern', () => {
-      const TestComponent = () => {
+      const TestComponent = (): JSX.Element => {
         const { theme, language, setAppConfigTheme, setAppConfigLanguage, toggleTheme } = useAppConfig();
 
         return (
           <div>
             <div data-testid="theme">{theme}</div>
             <div data-testid="language">{language}</div>
-            <button
-              data-testid="set-dark"
-              onClick={() => setAppConfigTheme('dark')}
-            >
+            <button data-testid="set-dark" onClick={() => setAppConfigTheme('dark')}>
               Set Dark
             </button>
-            <button
-              data-testid="set-language"
-              onClick={() => setAppConfigLanguage('es')}
-            >
+            <button data-testid="set-language" onClick={() => setAppConfigLanguage('es')}>
               Set Language
             </button>
-            <button
-              data-testid="toggle"
-              onClick={toggleTheme}
-            >
+            <button data-testid="toggle" onClick={toggleTheme}>
               Toggle
             </button>
           </div>
@@ -126,7 +118,7 @@ describe('integration Tests', () => {
     });
 
     it('should work with initialValue', () => {
-      const TestComponent = () => {
+      const TestComponent = (): JSX.Element => {
         const { theme, language } = useAppConfig();
 
         return (
@@ -148,12 +140,11 @@ describe('integration Tests', () => {
     });
 
     it('should throw error when used outside Provider', () => {
-      const TestComponent = () => {
+      const TestComponent = (): JSX.Element => {
         try {
           useAppConfig();
           return <div>No error</div>;
-        }
-        catch (error) {
+        } catch (error) {
           return <div data-testid="error">{(error as Error).message}</div>;
         }
       };
@@ -168,24 +159,24 @@ describe('integration Tests', () => {
 
   describe('complex store with multiple setters and custom actions', () => {
     interface TodoItem {
-      id: string
-      text: string
-      completed: boolean
+      id: string;
+      text: string;
+      completed: boolean;
     }
 
     interface TodoValues {
-      items: TodoItem[]
-      filter: 'all' | 'active' | 'completed'
+      items: TodoItem[];
+      filter: 'all' | 'active' | 'completed';
     }
 
     type TodoStore = TodoValues & {
       actions: {
-        setItems: (items: TodoItem[]) => void
-        setFilter: (filter: 'all' | 'active' | 'completed') => void
-        addTodo: (text: string) => void
-        toggleTodo: (id: string) => void
-        clearCompleted: () => void
-      }
+        setItems: (items: TodoItem[]) => void;
+        setFilter: (filter: 'all' | 'active' | 'completed') => void;
+        addTodo: (text: string) => void;
+        toggleTodo: (id: string) => void;
+        clearCompleted: () => void;
+      };
     };
 
     const defaultValue: TodoValues = {
@@ -193,43 +184,41 @@ describe('integration Tests', () => {
       filter: 'all',
     };
 
-    const TodoContext = createZustandContext<TodoValues, StoreApi<TodoStore>>(
-      ({ initialValue }) => {
-        return createStore<TodoStore>()(
-          subscribeWithSelector(
-            (set, _get): TodoStore => ({
-              ...defaultValue,
-              ...initialValue,
-              actions: {
-                ...createSetters({ set: set as any, defaultValue, prefix: '' }),
-                addTodo: (text: string) => {
-                  const newTodo: TodoItem = {
-                    id: Date.now().toString(),
-                    text,
-                    completed: false,
-                  };
-                  set(state => ({
-                    items: [...state.items, newTodo],
-                  }));
-                },
-                toggleTodo: (id: string) => {
-                  set(state => ({
-                    items: state.items.map(item =>
-                      item.id === id ? { ...item, completed: !item.completed } : item,
-                    ),
-                  }));
-                },
-                clearCompleted: () => {
-                  set(state => ({
-                    items: state.items.filter(item => !item.completed),
-                  }));
-                },
+    const TodoContext = createZustandContext<TodoValues, StoreApi<TodoStore>>(({ initialValue }) => {
+      return createStore<TodoStore>()(
+        subscribeWithSelector(
+          (set, _get): TodoStore => ({
+            ...defaultValue,
+            ...initialValue,
+            actions: {
+              ...createSetters({ set: set as any, defaultValue, prefix: '' }),
+              addTodo: (text: string) => {
+                const newTodo: TodoItem = {
+                  id: Date.now().toString(),
+                  text,
+                  completed: false,
+                };
+                set((state) => ({
+                  items: [...state.items, newTodo],
+                }));
               },
-            }),
-          ),
-        );
-      },
-    );
+              toggleTodo: (id: string) => {
+                set((state) => ({
+                  items: state.items.map((item) =>
+                    item.id === id ? { ...item, completed: !item.completed } : item,
+                  ),
+                }));
+              },
+              clearCompleted: () => {
+                set((state) => ({
+                  items: state.items.filter((item) => !item.completed),
+                }));
+              },
+            },
+          }),
+        ),
+      );
+    });
 
     type TodoReturn = Omit<TodoStore, 'actions'> & TodoStore['actions'];
 
@@ -249,32 +238,21 @@ describe('integration Tests', () => {
     };
 
     it('should handle complex todo operations', () => {
-      const TestComponent = () => {
+      const TestComponent = (): JSX.Element => {
         const { items, filter, setFilter, addTodo, clearCompleted } = useTodos();
 
         return (
           <div>
             <div data-testid="count">{items.length}</div>
             <div data-testid="filter">{filter}</div>
-            <div data-testid="completed">
-              {items.filter(item => item.completed).length}
-            </div>
-            <button
-              data-testid="add"
-              onClick={() => addTodo('Test Todo')}
-            >
+            <div data-testid="completed">{items.filter((item) => item.completed).length}</div>
+            <button data-testid="add" onClick={() => addTodo('Test Todo')}>
               Add
             </button>
-            <button
-              data-testid="set-filter"
-              onClick={() => setFilter('active')}
-            >
+            <button data-testid="set-filter" onClick={() => setFilter('active')}>
               Set Filter
             </button>
-            <button
-              data-testid="clear"
-              onClick={clearCompleted}
-            >
+            <button data-testid="clear" onClick={clearCompleted}>
               Clear
             </button>
           </div>
