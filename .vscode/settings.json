@@ -1,27 +1,54 @@
 {
+  "npm.packageManager": "pnpm",
   "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.oxc": "explicit",
+    "source.organizeImports": "explicit"
   },
-  "eslint.format.enable": true,
+  "eslint.enable": false,
+  "eslint.validate": ["javascript", "typescript"],
   "prettier.enable": false,
+  "oxc.typeAware": true,
+  "oxc.lint.run": "onSave",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
   "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[json]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  "biome": false
+  "[yaml]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  }
 }

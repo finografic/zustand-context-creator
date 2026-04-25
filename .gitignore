@@ -63,3 +63,8 @@ docs/typedoc/
 !docs/.vitepress/config.ts
 !docs/**/*.md
 !docs/index.md
+
+
+# Agents
+.agents/
+!.agents/handoff.md

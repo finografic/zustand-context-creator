@@ -1,33 +1,41 @@
-# GitHub Copilot Instructions
+# Copilot Instructions
 
-> **Note**: These instructions are shared with Cursor AI. The source of truth is `.cursor/rules/` - all edits should be made there. The files in `.github/instructions/` are symlinks to the Cursor rules.
+## Rules — Project-Specific
 
-## Overview
+Project-specific rules live in `.github/instructions/project/*.instructions.md`.
 
-This package follows TypeScript best practices for creating reusable, well-typed utilities. All rules are defined in `.cursor/rules/` and shared with both Cursor and GitHub Copilot.
+## Rules — Global
 
-## Core Principles
+Rules are canonical in `.github/instructions/` — see `README.md` there for folder structure.
+Shared across Claude Code, Cursor, and GitHub Copilot.
 
-See `.cursorrules` for the main package guidelines.
+**General**
 
-## Detailed Rules
+- General baseline: `.github/instructions/general.instructions.md`
 
-The following instruction files contain detailed coding standards and patterns:
+**Code**
 
-- [General Development Rules](.github/instructions/00-general.instructions.md) - General coding principles
-- [File Naming](.github/instructions/01-file-naming.instructions.md) - File/folder naming conventions
-- [TypeScript Patterns](.github/instructions/02-typescript-patterns.instructions.md) - TypeScript best practices
-- [Provider/Context Patterns](.github/instructions/03-provider-context-patterns.instructions.md) - Zustand/Context patterns (core to this package)
-- [ESLint & Code Style](.github/instructions/04-eslint-code-style.instructions.md) - ESLint configuration rules
-- [Documentation](.github/instructions/05-documentation.instructions.md) - Documentation standards
-- [Modern TypeScript](.github/instructions/06-modern-typescript-patterns.instructions.md) - Advanced TypeScript patterns
+- TypeScript patterns: `.github/instructions/code/typescript-patterns.instructions.md`
+- Modern TS patterns: `.github/instructions/code/modern-typescript-patterns.instructions.md`
+- ESLint & style: `.github/instructions/code/eslint-code-style.instructions.md`
+- Provider/context patterns: `.github/instructions/code/provider-context-patterns.instructions.md`
+- Picocolors CLI styling: `.github/instructions/code/picocolors-cli-styling.instructions.md`
 
-## Quick Reference
+**Naming**
 
-When working on this package:
-- ✅ Use TypeScript with strict mode
-- ✅ Follow patterns in `03-provider-context-patterns.md` for store creation
-- ✅ Use named parameters for functions with 2+ arguments
-- ✅ Keep files in `src/`, build output in `dist/`
-- ✅ Focus on reusable, well-typed utilities
+- File naming: `.github/instructions/naming/file-naming.instructions.md`
+- Variable naming: `.github/instructions/naming/variable-naming.instructions.md`
 
+**Documentation**
+
+- Documentation: `.github/instructions/documentation/documentation.instructions.md`
+- README standards: `.github/instructions/documentation/readme-standards.instructions.md`
+- Agent-facing markdown: `.github/instructions/documentation/agent-facing-markdown.instructions.md`
+- Feature design specs: `.github/instructions/documentation/feature-design-specs.instructions.md`
+- TODO/DONE docs: `.github/instructions/documentation/todo-done-docs.instructions.md`
+
+**Git**
+
+- Git policy: `.github/instructions/git/git-policy.instructions.md`
+
+---

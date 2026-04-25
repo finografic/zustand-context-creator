@@ -1,1 +1,0 @@
-../../.cursor/rules/04-eslint-code-style.md

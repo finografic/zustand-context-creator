@@ -2,37 +2,46 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - master
-
+    branches: [master]
   pull_request:
-    branches:
-      - main
-      - master
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
-  ci:
+  lint:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Set node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: "@finografic"
 
-      - name: Setup
-        run: npm i -g @antfu/ni
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
 
-      - name: Install
-        run: nci
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build
-        run: nr build
+        run: pnpm build
 
       - name: Lint
-        run: nr lint
+        run: pnpm lint:ci
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Format check
+        run: pnpm format:check

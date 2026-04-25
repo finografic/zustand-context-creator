@@ -54,7 +54,7 @@ The project uses `simple-import-sort` for consistent import ordering. Imports mu
 
 ### Import Sorting - How to Handle
 
-- **Automatic Fix**: Run `pnpm lint.fix -- path/to/file.tsx` to auto-sort imports
+- **Automatic Fix**: Run `pnpm lint:fix -- path/to/file.tsx` to auto-sort imports
 - **On Save**: Prettier runs on save; you may need to manually trigger ESLint fix for import sorting
 - **Manual Fix**: Group imports according to the categories above, separated by blank lines
 
@@ -121,13 +121,13 @@ return (
 ### Auto-fix specific file
 
 ```bash
-pnpm lint.fix -- path/to/file.tsx
+pnpm lint:fix -- path/to/file.tsx
 ```
 
 ### Auto-fix all TypeScript files in a directory
 
 ```bash
-pnpm lint.fix -- "src/**/*.tsx"
+pnpm lint:fix -- "src/**/*.tsx"
 ```
 
 ### Check without fixing
@@ -146,9 +146,8 @@ These rules are intentionally disabled to improve developer experience:
 
 ## Best Practices
 
-1. **Don't manually fix import order** - Use `pnpm lint.fix`
+1. **Don't manually fix import order** - Use `pnpm lint:fix`
 2. **Don't add/remove JSX parentheses** - Let Prettier handle it
 3. **Group imports logically** - Follow the grouping rules above
 4. **Blank lines between import groups** - Improves readability
 5. **Run lint fix before committing** - Ensures consistent code style
-
