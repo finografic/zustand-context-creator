@@ -52,6 +52,8 @@
     "release:publish": "pnpm publish --registry https://npm.pkg.github.com",
     "·········· REGISTRIES": "··············································",
     "view:registry:gitub": "dotenvx run -- pnpm view @finografic/zustand-context-creator --registry=https://npm.pkg.github.com",
+    "·········· PACKAGES": "··················································",
+    "update:oxc-config": "pnpm update @finografic/oxc-config --latest && pnpm update oxfmt --latest && pnpm update oxlint --latest",
     "·········· UPDATE:DEPS": "·····················································",
     "upgrade:deps:v1": "pnpm update --latest",
     "upgrade:deps:all": "node scripts/update-deps.mjs",
@@ -67,8 +69,7 @@
     "typecheck": "tsc --noEmit",
     "·········· HOOKS": "·····················································",
     "prepack": "pnpm build",
-    "prepare": "husky",
-    "update:oxc-config": "pnpm update @finografic/oxc-config --latest && pnpm update oxfmt --latest && pnpm update oxlint --latest"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "latest",
